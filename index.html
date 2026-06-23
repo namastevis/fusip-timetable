@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>FUSIP 2026 · Timetable</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,74 +43,78 @@
   --radius: 6px;
   --font-d: 'Space Grotesk', system-ui, sans-serif;
   --font-b: 'Inter', system-ui, sans-serif;
-  
-  /* Dynamic layout height set via JavaScript */
-  --grid-height: 550px;
 }
-html { font-size: 14px; }
+
+html, body {
+  height: 100%;
+  overflow: hidden; /* STRICTLY removes vertical scroll from the page */
+  font-size: 14px;
+}
+
 body {
   font-family: var(--font-b);
   background: var(--parch);
   color: var(--ink);
-  min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   display: flex;
   flex-direction: column;
 }
 
-/* ─── APP WRAPPER (RESPONSIVE CONTAINER) ──────────────────────────────────── */
+/* ─── APP WRAPPER (100% HEIGHT CONTAINMENT) ───────────────────────────────── */
 .app-container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   background: var(--white);
-  min-height: 100dvh;
+  height: 100dvh;
+  max-height: 100dvh;
   box-shadow: 0 0 20px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
-/* ─── HEADER ───────────────────────────────────────────────────────────────── */
+/* ─── HEADER (COMPACTED FOR MOBILE) ────────────────────────────────────────── */
 .site-header {
   background: var(--teal);
   color: var(--white);
-  padding: 16px 16px 12px;
-  position: sticky;
-  top: 0;
+  padding: 8px 12px 6px;
+  position: relative;
   z-index: 100;
   box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  flex-shrink: 0;
 }
 .header-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
-  gap: 12px;
+  margin-bottom: 8px;
+  gap: 8px;
 }
 .header-title h1 {
   font-family: var(--font-d);
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.2;
   letter-spacing: -0.01em;
 }
 .header-title p {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: var(--teal-lt);
-  margin-top: 3px;
+  margin-top: 1px;
   font-weight: 500;
 }
 .whatsapp-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   background: #25d366;
   color: white;
   border: none;
   border-radius: 20px;
-  padding: 6px 12px;
+  padding: 5px 10px;
   font-family: var(--font-b);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
@@ -118,17 +122,17 @@ body {
   transition: transform 0.2s;
 }
 .whatsapp-btn:hover { transform: scale(1.03); }
-.whatsapp-btn svg { width: 14px; height: 14px; }
+.whatsapp-btn svg { width: 13px; height: 13px; }
 
-/* ─── DAY SELECTOR ─────────────────────────────────────────────────────────── */
+/* ─── DAY SELECTOR (SMALLER PILLS TO SAVE SPACE) ───────────────────────────── */
 .day-strip {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding-bottom: 4px;
+  padding-bottom: 2px;
 }
 .day-strip::-webkit-scrollbar { display: none; }
 .day-pill {
@@ -138,18 +142,18 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 1px;
   background: rgba(255,255,255,0.08);
   border: 1.5px solid transparent;
-  border-radius: 8px;
-  padding: 6px 10px;
+  border-radius: 6px;
+  padding: 4px 6px; /* Reduced padding */
   cursor: pointer;
   transition: all 0.2s ease;
-  min-width: 78px;
+  min-width: 62px;  /* Reduced width */
   text-align: center;
 }
 .day-pill .pill-prefix {
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   font-weight: 600;
   color: var(--teal-lt);
   text-transform: uppercase;
@@ -158,13 +162,13 @@ body {
 }
 .day-pill .pill-num {
   font-family: var(--font-d);
-  font-size: 1.1rem;
+  font-size: 0.95rem; /* Smaller font */
   font-weight: 700;
   color: var(--white);
   line-height: 1.1;
 }
 .day-pill .pill-date {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 500;
   color: var(--teal-lt);
 }
@@ -181,25 +185,34 @@ body {
 .day-pill.today-pill.active .pill-num { color: var(--teal); }
 
 .today-dot {
-  width: 5px; height: 5px;
+  width: 4px; height: 4px;
   border-radius: 50%;
   background: #f0b860;
   margin-top: 1px;
 }
 .day-pill.active .today-dot { background: var(--teal); }
 
-/* ─── MAIN CONTENT PANEL ───────────────────────────────────────────────────── */
+/* ─── DYNAMIC FLEX MAIN CONTENT ────────────────────────────────────────────── */
 main {
-  flex: 1;
+  flex: 1 1 0;
+  min-height: 0;
   background: var(--white);
+  display: flex;
+  flex-direction: column;
 }
-.day-panel { display: none; }
-.day-panel.active { display: block; }
+.day-panel { 
+  display: none; 
+  flex: 1 1 0; 
+  min-height: 0; 
+  flex-direction: column; 
+}
+.day-panel.active { display: flex; }
 
 .day-header {
-  padding: 16px 20px 12px;
+  padding: 10px 16px 8px;
   border-bottom: 1px solid var(--parch-dk);
   background: linear-gradient(to bottom, #fdfcf9, var(--white));
+  flex-shrink: 0;
 }
 .day-header-row {
   display: flex;
@@ -208,64 +221,68 @@ main {
 }
 .day-label {
   font-family: var(--font-d);
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--teal);
   line-height: 1;
 }
 .day-date {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--muted);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 .day-venue {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: var(--teal-mid);
   font-weight: 500;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 /* ─── BATCH LEGEND ─────────────────────────────────────────────────────────── */
 .legend {
   display: flex;
-  gap: 16px;
-  padding: 8px 20px;
+  gap: 12px;
+  padding: 6px 16px;
   background: var(--parch-dk);
   border-bottom: 1px solid rgba(0,0,0,0.05);
+  flex-shrink: 0;
 }
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.78rem;
+  gap: 5px;
+  font-size: 0.7rem;
   font-weight: 600;
   color: #333;
 }
 .legend-swatch {
-  width: 12px; height: 12px;
-  border-radius: 3px;
+  width: 10px; height: 10px;
+  border-radius: 2px;
   flex-shrink: 0;
 }
 .sw-b1 { background: var(--coral); }
 .sw-b2 { background: var(--gold); }
 
-/* ─── TIMELINE GRAPHICS ─────────────────────────────────────────────────────── */
+/* ─── TIMELINE GRAPHICS (PURE CSS PERCENTAGES) ────────────────────────────── */
 .timeline {
   display: flex;
-  padding: 10px 16px 24px 0;
+  padding: 8px 12px 12px 0;
+  flex: 1 1 0;
+  min-height: 0;
   position: relative;
 }
 .time-axis {
-  width: 52px;
+  width: 48px;
   flex-shrink: 0;
   position: relative;
+  height: 100%;
 }
 .tick {
   position: absolute;
   right: 6px;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 600;
   color: var(--muted);
   transform: translateY(-50%);
@@ -275,6 +292,7 @@ main {
 .grid {
   flex: 1;
   position: relative;
+  height: 100%;
 }
 .hline {
   position: absolute;
@@ -292,29 +310,29 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 5px 8px;
-  font-size: 0.78rem;
+  padding: 3px 6px;
+  font-size: 0.7rem;
   box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-  transition: all 0.2s ease;
+  transition: filter 0.2s ease;
 }
 .slot:hover {
   filter: brightness(0.97);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  z-index: 5;
 }
 .slot-name {
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.15;
   color: inherit;
 }
 .slot-fac {
-  font-size: 0.7rem;
-  line-height: 1.25;
-  margin-top: 2px;
+  font-size: 0.65rem;
+  line-height: 1.15;
+  margin-top: 1px;
   opacity: 0.85;
   font-weight: 500;
 }
 .slot-tag {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   margin-top: auto;
   font-style: normal;
   text-transform: uppercase;
@@ -324,32 +342,32 @@ main {
 }
 
 /* Slot themes */
-.s-meal   { background: var(--meal-bg);   border-left: 4px solid var(--meal-bd);   flex-direction: row; align-items: center; gap: 6px; }
-.s-meal .slot-name { color: #8b6020; font-size: 0.82rem; }
-.s-meal .meal-icon { font-size: 1rem; flex-shrink: 0; }
-.s-snack  { background: var(--snack-bg);  border-left: 4px solid var(--snack-bd);  }
+.s-meal   { background: var(--meal-bg);   border-left: 3px solid var(--meal-bd);   flex-direction: row; align-items: center; gap: 4px; }
+.s-meal .slot-name { color: #8b6020; font-size: 0.75rem; }
+.s-meal .meal-icon { font-size: 0.9rem; flex-shrink: 0; }
+.s-snack  { background: var(--snack-bg);  border-left: 3px solid var(--snack-bd);  }
 .s-snack .slot-name { color: #7a5010; }
-.s-free   { background: var(--free-bg);   border-left: 4px solid var(--free-bd);   }
+.s-free   { background: var(--free-bg);   border-left: 3px solid var(--free-bd);   }
 .s-free .slot-name { color: #4a7a5a; }
-.s-shared { background: var(--shared-bg); border-left: 4px solid var(--shared-bd); }
+.s-shared { background: var(--shared-bg); border-left: 3px solid var(--shared-bd); }
 .s-shared .slot-name { color: var(--teal); }
 .s-shared .slot-fac  { color: var(--teal-mid); }
-.s-orient { background: var(--orient-bg); border-left: 4px solid var(--orient-bd); }
+.s-orient { background: var(--orient-bg); border-left: 3px solid var(--orient-bd); }
 .s-orient .slot-name { color: #205030; }
-.s-trip   { background: var(--trip-bg);   border-left: 4px solid var(--trip-bd);   }
+.s-trip   { background: var(--trip-bg);   border-left: 3px solid var(--trip-bd);   }
 .s-trip .slot-name   { color: #704010; }
 .s-trip .slot-fac    { color: #906030; opacity: 1; }
-.s-sport  { background: var(--sport-bg);  border-left: 4px solid var(--sport-bd);  }
+.s-sport  { background: var(--sport-bg);  border-left: 3px solid var(--sport-bd);  }
 .s-sport .slot-name  { color: #2a4080; }
 .s-sport .slot-fac   { color: #5070a0; opacity: 1; }
-.s-well   { background: var(--well-bg);   border-left: 4px solid var(--well-bd);   }
+.s-well   { background: var(--well-bg);   border-left: 3px solid var(--well-bd);   }
 .s-well .slot-name   { color: #503080; }
 .s-well .slot-fac    { color: #7060a0; opacity: 1; }
 .s-end {
   border: none; background: transparent;
   border-top: 2px dashed var(--parch-dk);
   border-radius: 0;
-  padding: 6px 0 0;
+  padding: 4px 0 0;
 }
 .s-end .slot-name { color: var(--muted); font-style: italic; font-weight: 500; }
 
@@ -372,24 +390,24 @@ main {
 .half, .asym-tall, .asym-sub {
   border-radius: var(--radius);
   overflow: hidden;
-  padding: 5px 8px;
+  padding: 3px 6px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   min-height: 0;
   box-shadow: 0 1px 2px rgba(0,0,0,0.02);
 }
-.half .slot-name, .asym-sub .slot-name, .asym-tall .slot-name { font-size: 0.75rem; font-weight: 700; line-height: 1.25; color: var(--ink); }
-.half .slot-fac, .asym-sub .slot-fac, .asym-tall .slot-fac   { font-size: 0.68rem;  line-height: 1.25; margin-top: 2px; color: #444; font-weight: 500; }
-.half .slot-tag, .asym-sub .slot-tag, .asym-tall .slot-tag   { font-size: 0.62rem; margin-top: auto; font-weight: 600; text-transform: uppercase; color: #666; }
+.half .slot-name, .asym-sub .slot-name, .asym-tall .slot-name { font-size: 0.68rem; font-weight: 700; line-height: 1.15; color: var(--ink); }
+.half .slot-fac, .asym-sub .slot-fac, .asym-tall .slot-fac   { font-size: 0.6rem;  line-height: 1.15; margin-top: 2px; color: #444; font-weight: 500; }
+.half .slot-tag, .asym-sub .slot-tag, .asym-tall .slot-tag   { font-size: 0.55rem; margin-top: auto; font-weight: 600; text-transform: uppercase; color: #666; }
 
-.h-b1 { background: var(--coral-lt); border-left: 4px solid var(--coral); }
-.h-b2 { background: var(--gold-lt);  border-left: 4px solid var(--gold);  }
-.h-trip   { background: var(--trip-bg);   border-left: 4px solid var(--trip-bd); }
-.h-orient { background: var(--orient-bg); border-left: 4px solid var(--orient-bd); }
-.h-snack  { background: var(--snack-bg);  border-left: 4px solid var(--snack-bd); }
-.h-free   { background: var(--free-bg);   border-left: 4px solid var(--free-bd);  }
-.h-sport  { background: var(--sport-bg);  border-left: 4px solid var(--sport-bd); }
+.h-b1 { background: var(--coral-lt); border-left: 3px solid var(--coral); }
+.h-b2 { background: var(--gold-lt);  border-left: 3px solid var(--gold);  }
+.h-trip   { background: var(--trip-bg);   border-left: 3px solid var(--trip-bd); }
+.h-orient { background: var(--orient-bg); border-left: 3px solid var(--orient-bd); }
+.h-snack  { background: var(--snack-bg);  border-left: 3px solid var(--snack-bd); }
+.h-free   { background: var(--free-bg);   border-left: 3px solid var(--free-bd);  }
+.h-sport  { background: var(--sport-bg);  border-left: 3px solid var(--sport-bd); }
 .h-empty  { background: transparent; border: none; box-shadow: none; }
 
 .h-trip .slot-name   { color: #704010; }
@@ -443,66 +461,47 @@ main {
 /* ─── FOOTER ───────────────────────────────────────────────────────────────── */
 .site-footer {
   text-align: center;
-  padding: 20px;
-  font-size: 0.75rem;
+  padding: 12px;
+  font-size: 0.7rem;
   color: var(--muted);
   font-weight: 500;
   border-top: 1px solid var(--parch-dk);
   background: var(--parch);
-  margin-top: auto;
+  flex-shrink: 0;
 }
 
 /* ─── SCREEN SIZE OPTIMIZATIONS (TABLET & LAPTOP MODE) ────────────────────── */
 @media (min-width: 768px) {
   html { font-size: 15px; }
-  
-  .site-header {
-    padding: 20px 24px 16px;
-  }
-  .header-title h1 {
-    font-size: 1.4rem;
-  }
-  .header-title p {
-    font-size: 0.9rem;
-  }
-  .day-strip {
-    gap: 10px;
-    justify-content: flex-start;
-  }
-  .day-pill {
-    min-width: 100px;
-    padding: 8px 12px;
-    border-radius: 10px;
-  }
-  .day-pill .pill-prefix { font-size: 0.68rem; }
-  .day-pill .pill-num { font-size: 1.3rem; }
-  .day-pill .pill-date { font-size: 0.75rem; }
-  
-  .day-header { padding: 20px 30px 14px; }
-  .day-label { font-size: 2rem; }
-  .day-date { font-size: 1rem; }
-  .legend { padding: 10px 30px; }
+  .site-header { padding: 16px 24px 12px; }
+  .header-title h1 { font-size: 1.4rem; }
+  .header-title p { font-size: 0.9rem; }
+  .day-strip { gap: 10px; justify-content: flex-start; }
+  .day-pill { min-width: 90px; padding: 8px 12px; border-radius: 8px; }
+  .day-pill .pill-prefix { font-size: 0.65rem; }
+  .day-pill .pill-num { font-size: 1.2rem; }
+  .day-pill .pill-date { font-size: 0.72rem; }
+  .day-header { padding: 18px 24px 14px; }
+  .day-label { font-size: 1.8rem; }
+  .day-date { font-size: 0.9rem; }
+  .legend { padding: 8px 24px; }
   .timeline { padding: 16px 24px 32px 0; }
-  .time-axis { width: 65px; }
+  .time-axis { width: 60px; }
   .tick { font-size: 0.75rem; right: 10px; }
-  
-  .slot { padding: 8px 12px; font-size: 0.85rem; }
-  .slot-fac { font-size: 0.75rem; margin-top: 4px; }
-  .slot-tag { font-size: 0.7rem; }
-  
-  .half, .asym-tall, .asym-sub { padding: 8px 12px; }
-  .half .slot-name, .asym-sub .slot-name, .asym-tall .slot-name { font-size: 0.82rem; }
-  .half .slot-fac, .asym-sub .slot-fac, .asym-tall .slot-fac { font-size: 0.72rem; margin-top: 3px; }
-  .half .slot-tag, .asym-sub .slot-tag, .asym-tall .slot-tag { font-size: 0.68rem; }
+  .slot { padding: 6px 10px; font-size: 0.8rem; }
+  .slot-fac { font-size: 0.7rem; margin-top: 3px; }
+  .half, .asym-tall, .asym-sub { padding: 6px 10px; }
+  .half .slot-name, .asym-sub .slot-name, .asym-tall .slot-name { font-size: 0.78rem; }
+  .half .slot-fac, .asym-sub .slot-fac, .asym-tall .slot-fac { font-size: 0.68rem; margin-top: 2px; }
 }
 
 @media (min-width: 1024px) {
   html { font-size: 16px; }
   .app-container {
-    margin: 20px auto;
+    margin: 16px auto;
     border-radius: 12px;
-    overflow: hidden;
-    min-height: calc(100dvh - 40px);
+    height: calc(100dvh - 32px);
+    max-height: calc(100dvh - 32px);
   }
 }
 </style>
@@ -678,7 +677,7 @@ const SCHEDULE = {
           b2:{label:"🏸 Badminton", fac:"Badminton Court · Batch 2A", cls:"sport"}},
         {type:"split",  start:"19:00", end:"20:00",
           b1:{label:"⚽ Futsal",    fac:"Futsal Court · Batch 1B",    cls:"sport"},
-          b2:"🏸 Badminton", fac:"Badminton Court · Batch 2B", cls:"sport"},
+          b2:{label:"🏸 Badminton", fac:"Badminton Court · Batch 2B", cls:"sport"}},
         {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
       ]
     },
@@ -765,35 +764,20 @@ const SCHEDULE = {
   ]
 };
 
-// ─── TIMELINE DYNAMIC CONSTANTS ────────────────────────────────────────────
-const DAY_START = 7 * 60;  // 7:00 am
-const DAY_END   = 21 * 60; // 9:00 pm
-const SPAN      = DAY_END - DAY_START;
-const GAP       = 3;       // Gap between timeline elements
+// ─── OPTIMIZED CSS-DRIVEN PERCENTAGE RENDERING ENGINE ──────────────────────
+// This eliminates DOM reflow JS logic. The UI dynamically fits the screen.
+const DAY_START = 7 * 60;  // 7:00 am (420 mins)
+const DAY_END   = 21 * 60; // 9:00 pm (1260 mins)
+const SPAN      = DAY_END - DAY_START; // Total mapped duration (840 mins)
 
-function getGridHeight() {
-  if (window.innerWidth >= 1024) return 850; 
-  if (window.innerWidth >= 768)  return 680; 
-  return 500;                               
-}
-
-let GRID_H = getGridHeight();
-
-function updateLayoutDimensions() {
-  GRID_H = getGridHeight();
-  document.documentElement.style.setProperty('--grid-height', `${GRID_H}px`);
-}
-
+// Helpers to cleanly turn HH:MM to relative Flex/Percentage bounds
 function toMins(hhmm) {
   const [h, m] = hhmm.split(':').map(Number);
   return h * 60 + m;
 }
-function yPos(mins) {
-  return ((mins - DAY_START) / SPAN) * GRID_H;
-}
-function slotTop(startMins)  { return yPos(startMins) + GAP; }
-function slotHt(startMins, endMins, minHt = 18) {
-  return Math.max(yPos(endMins) - yPos(startMins) - GAP, minHt);
+
+function toPercent(mins) {
+  return ((mins - DAY_START) / SPAN) * 100;
 }
 
 function parseTick(label) {
@@ -806,78 +790,78 @@ function parseTick(label) {
   return hr * 60 + parseInt(m);
 }
 
-function slotClass(type) {
-  const map = {
-    meal:'s-meal', snack:'s-snack', free:'s-free', shared:'s-shared',
-    orient:'s-orient', trip:'s-trip', sport:'s-sport', well:'s-well', end:'s-end'
-  };
-  return map[type] || 's-shared';
-}
-function halfClass(cls) {
-  const map = {
-    b1:'h-b1', b2:'h-b2', trip:'h-trip', orient:'h-orient',
-    snack:'h-snack', free:'h-free', sport:'h-sport', empty:'h-empty'
-  };
-  return map[cls] || 'h-b1';
+const slotClassMap = {
+  meal:'s-meal', snack:'s-snack', free:'s-free', shared:'s-shared',
+  orient:'s-orient', trip:'s-trip', sport:'s-sport', well:'s-well', end:'s-end'
+};
+const halfClassMap = {
+  b1:'h-b1', b2:'h-b2', trip:'h-trip', orient:'h-orient',
+  snack:'h-snack', free:'h-free', sport:'h-sport', empty:'h-empty'
+};
+
+function getInlineStyle(startMin, endMin) {
+  const topPct = toPercent(startMin);
+  const htPct = Math.max(toPercent(endMin) - topPct, 0); // clamp positive
+  return `top: calc(${topPct}% + 1px); height: calc(${htPct}% - 2px);`;
 }
 
 function renderSlot(s) {
   const sm = toMins(s.start), em = toMins(s.end);
-  const top = slotTop(sm), ht = slotHt(sm, em);
+  const style = getInlineStyle(sm, em);
 
   if (s.type === 'meal') {
-    return `<div class="slot s-meal" style="top:${top}px;height:${ht}px;">
+    return `<div class="slot s-meal" style="${style}">
       <span class="meal-icon">${s.icon||'🍽'}</span>
       <span class="slot-name">${s.label}</span>
     </div>`;
   }
+  
   if (['snack', 'free', 'shared', 'orient', 'trip', 'sport', 'well', 'end'].includes(s.type)) {
-    const cls = slotClass(s.type);
+    const cls = slotClassMap[s.type] || 's-shared';
     const fac = s.fac ? `<span class="slot-fac">${s.fac}</span>` : '';
-    const sub = s.sub ? `<span class="slot-fac">${s.sub}</span>` : '';
-    return `<div class="slot ${cls}" style="top:${top}px;height:${ht}px;">
-      <span class="slot-name">${s.label}</span>${fac}${sub}
+    return `<div class="slot ${cls}" style="${style}">
+      <span class="slot-name">${s.label}</span>${fac}
     </div>`;
   }
+  
   if (s.type === 'split') {
-    const splitTop = yPos(sm) + GAP;
-    const splitHt  = slotHt(sm, em);
-    function half(h) {
+    const half = (h, defaultSide) => {
       if (!h) return '';
-      const hcls = halfClass(h.cls || (h === s.b1 ? 'b1' : 'b2'));
+      const hcls = halfClassMap[h.cls || defaultSide] || 'h-b1';
       const fac  = h.fac  ? `<span class="slot-fac">${h.fac}</span>` : '';
       const tag  = h.tag  ? `<span class="slot-tag">${h.tag}</span>` : '';
       const name = h.label ? `<span class="slot-name">${h.label}</span>` : '';
-      return `<div class="half ${hcls}" style="height:${splitHt}px;">${name}${fac}${tag}</div>`;
-    }
-    return `<div class="slot-split" style="top:${splitTop}px;height:${splitHt}px;">
-      ${half(s.b1)}${half(s.b2)}
-    </div>`;
+      return `<div class="half ${hcls}">${name}${fac}${tag}</div>`;
+    };
+    return `<div class="slot-split" style="${style}">${half(s.b1, 'b1')}${half(s.b2, 'b2')}</div>`;
   }
+  
   if (s.type === 'asym') {
-    const asymTop = yPos(sm) + GAP;
-    const asymHt  = slotHt(sm, em);
     const t = s.tall;
-    const tallCls = t.cls ? halfClass(t.cls) : (t.side === 'b1' ? 'h-b1' : 'h-b2');
-    const tallHtml = `<div class="asym-tall ${tallCls}" style="height:${asymHt}px;">
+    const tallCls = halfClassMap[t.cls || t.side] || 'h-b1';
+    const tallHtml = `<div class="asym-tall ${tallCls}">
       <span class="slot-name">${t.label}</span>
       ${t.fac ? `<span class="slot-fac">${t.fac}</span>` : ''}
       ${t.tag ? `<span class="slot-tag">${t.tag}</span>` : ''}
     </div>`;
+    
     const stackCells = s.stack.map(sub => {
-      const subSm  = toMins(sub.start), subEm = toMins(sub.end);
-      const subTop = yPos(subSm) - yPos(sm) + GAP;
-      const subHt  = slotHt(subSm, subEm);
-      const scls   = sub.cls ? halfClass(sub.cls) : (t.side === 'b1' ? 'h-b2' : 'h-b1');
-      return `<div class="asym-sub ${scls}" style="top:${subTop}px;height:${subHt}px;">
+      const subSm = toMins(sub.start);
+      // Determine internal percentage position relative to its split container
+      const subTopPct = ((subSm - sm) / (em - sm)) * 100; 
+      const subHtPct = ((toMins(sub.end) - subSm) / (em - sm)) * 100;
+      
+      const scls = halfClassMap[sub.cls || (t.side === 'b1' ? 'b2' : 'b1')] || 'h-b1';
+      return `<div class="asym-sub ${scls}" style="top: ${subTopPct}%; height: calc(${subHtPct}% - 1px);">
         <span class="slot-name">${sub.label}</span>
         ${sub.fac ? `<span class="slot-fac">${sub.fac}</span>` : ''}
         ${sub.tag ? `<span class="slot-tag">${sub.tag}</span>` : ''}
       </div>`;
     }).join('');
-    const stackHtml = `<div class="asym-stack" style="height:${asymHt}px;">${stackCells}</div>`;
+    
+    const stackHtml = `<div class="asym-stack">${stackCells}</div>`;
     const [left, right] = t.side === 'b1' ? [tallHtml, stackHtml] : [stackHtml, tallHtml];
-    return `<div class="slot-asym" style="top:${asymTop}px;height:${asymHt}px;">${left}${right}</div>`;
+    return `<div class="slot-asym" style="${style}">${left}${right}</div>`;
   }
   return '';
 }
@@ -885,12 +869,12 @@ function renderSlot(s) {
 function renderDay(day) {
   const tickMins  = day.ticks.map(parseTick);
   const ticksHtml = tickMins.map(m =>
-    `<div class="tick" style="top:${yPos(m)}px;">${day.ticks[tickMins.indexOf(m)]}</div>`
+    `<div class="tick" style="top:${toPercent(m)}%;">${day.ticks[tickMins.indexOf(m)]}</div>`
   ).join('');
 
   const hlinesHtml = Array.from({length:15}, (_,i) => (i+7)*60)
     .filter(m => m <= DAY_END)
-    .map(m => `<div class="hline" style="top:${yPos(m)}px;"></div>`)
+    .map(m => `<div class="hline" style="top:${toPercent(m)}%;"></div>`)
     .join('');
 
   const slotsHtml = day.slots.map(renderSlot).join('');
@@ -910,8 +894,8 @@ function renderDay(day) {
       <div class="legend-item"><span class="legend-swatch sw-b2"></span>${SCHEDULE.batch2}</div>
     </div>
     <div class="timeline">
-      <div class="time-axis" style="height:var(--grid-height);" id="axis-${day.num}">${ticksHtml}</div>
-      <div class="grid" style="height:var(--grid-height);" id="grid-${day.num}">
+      <div class="time-axis" id="axis-${day.num}">${ticksHtml}</div>
+      <div class="grid" id="grid-${day.num}">
         ${hlinesHtml}
         ${slotsHtml}
         <div class="now-line" id="now-${day.num}" style="display:none;">
@@ -922,34 +906,36 @@ function renderDay(day) {
   </div>`;
 }
 
-// ─── SYSTEM ENGINE CALCULATION ──────────────────────────────────────────────
+// ─── CONTROLLER ─────────────────────────────────────────────────────────────
 const PROG_START = new Date('2026-06-29');
+
 function getCurrentDay() {
   const now = new Date();
   const diff = Math.floor((now - PROG_START) / (1000 * 60 * 60 * 24));
-  if (diff >= 0 && diff < 10) return diff + 1;
-  return null;
-}
-function isToday(dayNum) {
-  return getCurrentDay() === dayNum;
+  return (diff >= 0 && diff < 10) ? diff + 1 : null;
 }
 
 function updateNowLine() {
   const todayNum = getCurrentDay();
   if (!todayNum) return;
+  
   const now = new Date();
   const mins = now.getHours() * 60 + now.getMinutes();
-  const inRange = mins >= DAY_START && mins <= DAY_END;
   const line = document.getElementById(`now-${todayNum}`);
   const pill = document.getElementById(`now-pill-${todayNum}`);
-  if (!line || !pill) return;
-  if (!inRange) { line.style.display = 'none'; return; }
   
-  line.style.top     = `${yPos(mins)}px`;
+  if (!line || !pill) return;
+  if (mins < DAY_START || mins > DAY_END) { 
+    line.style.display = 'none'; 
+    return; 
+  }
+  
+  line.style.top = `${toPercent(mins)}%`;
   line.style.display = 'flex';
+  
   const h12 = now.getHours() % 12 || 12;
   const ampm = now.getHours() < 12 ? 'am' : 'pm';
-  const mm   = String(now.getMinutes()).padStart(2, '0');
+  const mm = String(now.getMinutes()).padStart(2, '0');
   pill.textContent = `${h12}:${mm}${ampm}`;
 }
 
@@ -969,43 +955,33 @@ function activateDay(num, scroll = true) {
   updateNowLine();
 }
 
-function renderEntireInterface() {
+function init() {
   const strip = document.getElementById('day-strip');
   const main  = document.getElementById('main');
   
-  strip.innerHTML = '';
-  updateLayoutDimensions();
-
+  // Render Navigation
   SCHEDULE.days.forEach(day => {
-    const today = isToday(day.num);
+    const isToday = getCurrentDay() === day.num;
     const pill = document.createElement('button');
-    pill.className  = 'day-pill' + (today ? ' today-pill' : '');
+    pill.className  = `day-pill ${isToday ? 'today-pill' : ''}`;
     pill.dataset.day = day.num;
     pill.innerHTML  = `
       <span class="pill-prefix">Day ${day.num}</span>
       <span class="pill-num">${day.weekday.slice(0,3)}</span>
       <span class="pill-date">${day.date}</span>
-      ${today ? '<span class="today-dot"></span>' : ''}
+      ${isToday ? '<span class="today-dot"></span>' : ''}
     `;
     pill.addEventListener('click', () => activateDay(day.num));
     strip.appendChild(pill);
   });
 
+  // Render Core Timeline Interface
   main.innerHTML = SCHEDULE.days.map(renderDay).join('');
-  activateDay(activeDay, false);
-}
-
-window.addEventListener('resize', () => {
-  const previousActive = activeDay;
-  renderEntireInterface();
-  activateDay(previousActive, false);
-});
-
-function init() {
-  const todayNum = getCurrentDay();
-  activeDay = todayNum || 1;
-  renderEntireInterface();
   
+  // Set Active View
+  activateDay(getCurrentDay() || 1, true);
+  
+  // Real-time Tracker Start
   updateNowLine();
   setInterval(updateNowLine, 60000);
 }
