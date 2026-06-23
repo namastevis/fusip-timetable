@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>FUSIP 2026 · Timetable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & BASE ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --teal:     #1a4a5c;
+  --teal-mid: #2a6a82;
+  --teal-lt:  #a8d5e2;
+  --parch:    #f5f0e8;
+  --parch-dk: #e8e0d0;
+  --coral:    #e07060;
+  --coral-lt: #fae8e5;
+  --gold:     #c9a227;
+  --gold-lt:  #fdf5dc;
+  --ink:      #1a1a2e;
+  --muted:    #6b7280;
+  --white:    #ffffff;
+  --snack-bg: #fef3e2;
+  --snack-bd: #e0a030;
+  --meal-bg:  #fff8ee;
+  --meal-bd:  #f0b860;
+  --free-bg:  #eff5f0;
+  --free-bd:  #8ab8a0;
+  --orient-bg:#e8f4ec;
+  --orient-bd:#40a060;
+  --trip-bg:  #fff0e0;
+  --trip-bd:  #e08030;
+  --sport-bg: #eef3fb;
+  --sport-bd: #5080c0;
+  --well-bg:  #f0eef8;
+  --well-bd:  #8070c0;
+  --shared-bg:#dde8ec;
+  --shared-bd:#1a4a5c;
+  --gap: 2px;
+  --radius: 4px;
+  --font-d: 'Space Grotesk', system-ui, sans-serif;
+  --font-b: 'Inter', system-ui, sans-serif;
+}
+html { font-size: 14px; }
+body {
+  font-family: var(--font-b);
+  background: var(--parch);
+  color: var(--ink);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── HEADER ───────────────────────────────────────────────────────────────── */
+.site-header {
+  background: var(--teal);
+  color: var(--white);
+  padding: 14px 16px 10px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.header-title h1 {
+  font-family: var(--font-d);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.header-title p {
+  font-size: 0.72rem;
+  color: var(--teal-lt);
+  margin-top: 1px;
+}
+.whatsapp-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #25d366;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 10px;
+  font-family: var(--font-b);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.whatsapp-btn svg { width: 14px; height: 14px; }
+
+/* ─── DAY SELECTOR ─────────────────────────────────────────────────────────── */
+.day-strip {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.day-strip::-webkit-scrollbar { display: none; }
+.day-pill {
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  background: rgba(255,255,255,0.12);
+  border: 1.5px solid transparent;
+  border-radius: 10px;
+  padding: 5px 9px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  min-width: 46px;
+}
+.day-pill .pill-num {
+  font-family: var(--font-d);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+}
+.day-pill .pill-day {
+  font-size: 0.6rem;
+  color: var(--teal-lt);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.day-pill.active {
+  background: var(--white);
+  border-color: var(--white);
+}
+.day-pill.active .pill-num { color: var(--teal); }
+.day-pill.active .pill-day { color: var(--teal-mid); }
+.day-pill.today-pill { border-color: #f0b860; }
+.day-pill.today-pill .pill-num { color: #f0b860; }
+.day-pill.today-pill.active .pill-num { color: var(--teal); }
+.today-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: #f0b860;
+  margin-top: 1px;
+}
+
+/* ─── DAY PANEL ────────────────────────────────────────────────────────────── */
+.day-panel { display: none; }
+.day-panel.active { display: block; }
+
+.day-header {
+  padding: 12px 16px 8px;
+  border-bottom: 1px solid var(--parch-dk);
+}
+.day-header-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.day-label {
+  font-family: var(--font-d);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--teal);
+  line-height: 1;
+}
+.day-date {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.day-venue {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.day-venue span { font-size: 0.75rem; }
+
+/* ─── BATCH LEGEND ─────────────────────────────────────────────────────────── */
+.legend {
+  display: flex;
+  gap: 12px;
+  padding: 6px 16px;
+  background: var(--parch-dk);
+  border-bottom: 1px solid var(--parch-dk);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #444;
+}
+.legend-swatch {
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.sw-b1 { background: var(--coral); }
+.sw-b2 { background: var(--gold); }
+
+/* ─── TIMELINE ─────────────────────────────────────────────────────────────── */
+.timeline {
+  display: flex;
+  padding: 8px 8px 16px 0;
+  position: relative;
+}
+.time-axis {
+  width: 40px;
+  flex-shrink: 0;
+  position: relative;
+}
+.tick {
+  position: absolute;
+  right: 4px;
+  font-size: 0.6rem;
+  color: var(--muted);
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.grid {
+  flex: 1;
+  position: relative;
+}
+.hline {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: rgba(0,0,0,0.07);
+}
+
+/* ─── SLOTS ────────────────────────────────────────────────────────────────── */
+.slot {
+  position: absolute;
+  left: 0; right: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 3px 4px;
+  font-size: 0.72rem;
+}
+.slot-name {
+  font-weight: 700;
+  line-height: 1.2;
+  color: inherit;
+}
+.slot-fac {
+  font-size: 0.65rem;
+  line-height: 1.2;
+  margin-top: 1px;
+  opacity: 0.75;
+}
+.slot-tag {
+  font-size: 0.6rem;
+  margin-top: 1px;
+  font-style: italic;
+  opacity: 0.65;
+}
+
+/* Slot themes */
+.s-meal   { background: var(--meal-bg);   border-left: 3px solid var(--meal-bd);   flex-direction: row; align-items: center; gap: 4px; }
+.s-meal .slot-name { color: #8b6020; font-size: 0.75rem; }
+.s-meal .meal-icon { font-size: 0.9rem; flex-shrink: 0; }
+.s-snack  { background: var(--snack-bg);  border-left: 3px solid var(--snack-bd);  }
+.s-snack .slot-name { color: #7a5010; font-size: 0.68rem; }
+.s-free   { background: var(--free-bg);   border-left: 3px solid var(--free-bd);   }
+.s-free .slot-name { color: #4a7a5a; }
+.s-shared { background: var(--shared-bg); border-left: 3px solid var(--shared-bd); }
+.s-shared .slot-name { color: var(--teal); }
+.s-shared .slot-fac  { color: var(--teal-mid); }
+.s-orient { background: var(--orient-bg); border-left: 3px solid var(--orient-bd); }
+.s-orient .slot-name { color: #205030; }
+.s-trip   { background: var(--trip-bg);   border-left: 3px solid var(--trip-bd);   }
+.s-trip .slot-name   { color: #704010; }
+.s-trip .slot-fac    { color: #906030; opacity: 1; }
+.s-sport  { background: var(--sport-bg);  border-left: 3px solid var(--sport-bd);  }
+.s-sport .slot-name  { color: #2a4080; }
+.s-sport .slot-fac   { color: #5070a0; opacity: 1; }
+.s-well   { background: var(--well-bg);   border-left: 3px solid var(--well-bd);   }
+.s-well .slot-name   { color: #503080; }
+.s-well .slot-fac    { color: #7060a0; opacity: 1; }
+.s-end {
+  border: none; background: transparent;
+  border-top: 2px dashed var(--parch-dk);
+  border-radius: 0;
+  padding: 3px 0 0;
+}
+.s-end .slot-name { color: var(--muted); font-style: italic; font-weight: 400; }
+
+/* ─── SPLIT SLOT ───────────────────────────────────────────────────────────── */
+.slot-split {
+  position: absolute;
+  left: 0; right: 0;
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap);
+  padding: 0;
+  background: transparent;
+  overflow: visible;
+}
+.slot-split > * {
+  flex: 1 1 0% !important;
+  min-width: 0;
+  max-width: calc(50% - 1px);
+}
+.half {
+  border-radius: var(--radius);
+  overflow: hidden;
+  padding: 3px 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 0;
+}
+.half .slot-name { font-size: 0.68rem; font-weight: 700; line-height: 1.15; color: var(--ink); }
+.half .slot-fac  { font-size: 0.6rem;  line-height: 1.15; margin-top: 1px; color: #555; white-space: pre-line; }
+.half .slot-tag  { font-size: 0.56rem; margin-top: 1px; font-style: italic; color: #888; }
+.h-b1 { background: var(--coral-lt); border-left: 3px solid var(--coral); }
+.h-b2 { background: var(--gold-lt);  border-left: 3px solid var(--gold);  }
+.h-trip   { background: var(--trip-bg);   border-left: 3px solid var(--trip-bd); }
+.h-orient { background: var(--orient-bg); border-left: 3px solid var(--orient-bd); }
+.h-snack  { background: var(--snack-bg);  border-left: 3px solid var(--snack-bd); }
+.h-free   { background: var(--free-bg);   border-left: 3px solid var(--free-bd);  }
+.h-sport  { background: var(--sport-bg);  border-left: 3px solid var(--sport-bd); }
+.h-empty  { background: transparent; border: none; }
+.h-trip .slot-name   { color: #704010; }
+.h-trip .slot-fac    { color: #906030; }
+.h-orient .slot-name { color: #205030; }
+.h-snack .slot-name  { color: #7a5010; }
+.h-free .slot-name   { color: #4a7a5a; }
+.h-sport .slot-name  { color: #2a4080; }
+.h-sport .slot-fac   { color: #5070a0; }
+
+/* ─── ASYMMETRIC SLOT ─────────────────────────────────────────────────────── */
+.slot-asym {
+  position: absolute;
+  left: 0; right: 0;
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap);
+  overflow: visible;
+}
+.slot-asym > * {
+  flex: 1 1 0% !important;
+  min-width: 0;
+  max-width: calc(50% - 1px);
+}
+.asym-tall {
+  border-radius: var(--radius);
+  overflow: hidden;
+  padding: 3px 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.asym-stack {
+  position: relative;
+}
+.asym-sub {
+  position: absolute;
+  left: 0; right: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  padding: 3px 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.asym-sub .slot-name { font-size: 0.68rem; font-weight: 700; line-height: 1.15; color: var(--ink); }
+.asym-sub .slot-fac  { font-size: 0.6rem;  line-height: 1.15; margin-top: 1px; color: #555; }
+.asym-sub .slot-tag  { font-size: 0.56rem; margin-top: 1px; font-style: italic; color: #888; }
+
+/* ─── NOW LINE ─────────────────────────────────────────────────────────────── */
+.now-line {
+  position: absolute;
+  left: -2px; right: 0;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.now-line::before {
+  content: '';
+  position: absolute;
+  left: 12px; right: 0;
+  height: 2px;
+  background: var(--coral);
+  border-radius: 1px;
+}
+.now-pill {
+  position: relative;
+  background: var(--coral);
+  color: white;
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 2px 4px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  z-index: 1;
+  margin-left: 0;
+}
+
+/* ─── FOOTER ───────────────────────────────────────────────────────────────── */
+.site-footer {
+  text-align: center;
+  padding: 16px;
+  font-size: 0.65rem;
+  color: var(--muted);
+  border-top: 1px solid var(--parch-dk);
+  margin-top: 8px;
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-title">
+      <h1>FUSIP 2026</h1>
+      <p>FLAME University Summer Immersion · June–July 2026</p>
+    </div>
+    <a class="whatsapp-btn" id="share-btn" href="#" onclick="shareWhatsApp(); return false;">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Share
+    </a>
+  </div>
+  <div class="day-strip" id="day-strip"></div>
+</header>
+
+<main id="main"></main>
+
+<footer class="site-footer">
+  FLAME University · FUSIP 2026 · All times IST
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// SCHEDULE DATA — edit this section to update the timetable
+// ═══════════════════════════════════════════════════════════════════════════
+const SCHEDULE = {
+  batch1: "Batch 1 (CHK 001)",
+  batch2: "Batch 2 (CHK 101)",
+  days: [
+    {
+      num: 1, weekday: "Monday", date: "29 June", venue: null,
+      ticks: ["7am","8am","9am","12pm","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
+      slots: [
+        {type:"meal",   start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
+        {type:"shared", start:"09:00", end:"12:00", label:"Arrival, Registration & Room Allocation"},
+        {type:"orient", start:"12:00", end:"13:30", label:"Welcome & Orientation"},
+        {type:"meal",   start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
+        {type:"free",   start:"14:30", end:"16:30", label:"Free Time"},
+        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack"},
+        {type:"shared", start:"17:00", end:"18:00", label:"Campus Tour"},
+        {type:"shared", start:"18:00", end:"19:00", label:"Ice Breakers", fac:"Kalidas"},
+        {type:"free",   start:"19:00", end:"20:00", label:"Free Time"},
+        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      ]
+    },
+    {
+      num: 2, weekday: "Tuesday", date: "30 June", venue: null,
+      ticks: ["7am","8am","9am","10am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
+      slots: [
+        {type:"meal", start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
+        {type:"asym", start:"09:00", end:"11:00",
+          tall:{side:"b1", label:"CaseLab: Business Decisions Through Comic Cases", fac:"Neha Yadav", tag:"Case Study"},
+          stack:[
+            {start:"09:00", end:"10:00", label:"Gen Z to Zen Z", fac:"Moitrayee Das", tag:"", cls:"b2"},
+            {start:"10:00", end:"11:00", label:"Outreach",        fac:"Anju Deoskar",  tag:"", cls:"b2"},
+          ]},
+        {type:"snack",  start:"11:00", end:"11:30", label:"☕ Snacks"},
+        {type:"split",  start:"11:30", end:"13:30",
+          b1:{label:"Hit the Road",                                    fac:"Jaslene Bawa", tag:"Finance"},
+          b2:{label:"CaseLab: Business Decisions Through Comic Cases", fac:"Neha Yadav",   tag:"Case Study"}},
+        {type:"meal",   start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
+        {type:"split",  start:"14:30", end:"16:30",
+          b1:{label:"Marketing Essentials", fac:"Aakash Kamble", tag:"Marketing"},
+          b2:{label:"Hit the Road",         fac:"Jaslene Bawa",  tag:"Finance"}},
+        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack"},
+        {type:"free",   start:"17:00", end:"18:00", label:"Free Time"},
+        {type:"sport",  start:"18:00", end:"19:00", label:"🏃 Zumba", fac:"Arjuna · 160 students"},
+        {type:"free",   start:"19:00", end:"20:00", label:"Free Time"},
+        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      ]
+    },
+    {
+      num: 3, weekday: "Wednesday", date: "1 July", venue: null,
+      ticks: ["7am","8am","9am","12pm","4:30pm","5pm","8pm","9pm"],
+      slots: [
+        {type:"split", start:"07:00", end:"08:00",
+          b1:{label:"", cls:"empty"},
+          b2:{label:"🍽 Early Breakfast", fac:"Before departure", cls:"b2"}},
+        {type:"split", start:"08:00", end:"09:00",
+          b1:{label:"🏕 Departs for Garud Machi", fac:"Breakfast served at camp", cls:"trip"},
+          b2:{label:"Pre-Departure Orientation",  fac:"Shivakumar Jolad",         cls:"orient"}},
+        {type:"asym", start:"09:00", end:"20:00",
+          tall:{side:"b1", label:"🏕 High Places Outdoor Camp", fac:"Garud Machi", tag:"Returns at dinner", cls:"trip"},
+          stack:[
+            {start:"09:00", end:"16:30", label:"🌾 Rural Immersion", fac:"Field trip",  tag:"Returns 4:30 pm", cls:"trip"},
+            {start:"16:30", end:"17:00", label:"☕ Evening Snack",    fac:"",            tag:"",               cls:"snack"},
+            {start:"17:00", end:"20:00", label:"Free Time",           fac:"",            tag:"",               cls:"free"},
+          ]},
+        {type:"meal", start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      ]
+    },
+    {
+      num: 4, weekday: "Thursday", date: "2 July", venue: null,
+      ticks: ["7am","8am","9am","10am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
+      slots: [
+        {type:"meal", start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
+        {type:"asym", start:"09:00", end:"11:00",
+          tall:{side:"b2", label:"Marketing Essentials", fac:"Aakash Kamble", tag:"Marketing"},
+          stack:[
+            {start:"09:00", end:"10:00", label:"Outreach",       fac:"Anju Deoskar",  tag:"", cls:"b1"},
+            {start:"10:00", end:"11:00", label:"Gen Z to Zen Z", fac:"Moitrayee Das", tag:"", cls:"b1"},
+          ]},
+        {type:"snack", start:"11:00", end:"11:30", label:"☕ Snacks"},
+        {type:"split", start:"11:30", end:"13:30",
+          b1:{label:"Entrepreneurs Are Made, Not Born", fac:"Vishal Shah", tag:"Entrepreneurship"},
+          b2:{label:"Colours in Nature",                fac:"Atul Joshi",  tag:"Physical & Natural Sciences"}},
+        {type:"meal",  start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
+        {type:"split", start:"14:30", end:"16:30",
+          b1:{label:"Introduction to Game Theory: Thinking Strategically", fac:"Arun Kumar Kaushik", tag:"Economics"},
+          b2:{label:"Applied AI: Building and Learning with AI",           fac:"Sorabh Bajaj",       tag:"Digital Learning"}},
+        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack"},
+        {type:"well",   start:"17:00", end:"18:00", label:"Wonders of Wellness 1", fac:"Suniti Vadalkar · APJ Design Lab · 25 students"},
+        {type:"split",  start:"18:00", end:"19:00",
+          b1:{label:"🏀 Basketball", fac:"Basketball Court · Batch 1A", cls:"sport"},
+          b2:{label:"🏓 Pickleball", fac:"Pickleball Court · Batch 2A", cls:"sport"}},
+        {type:"split",  start:"19:00", end:"20:00",
+          b1:{label:"🏀 Basketball", fac:"Basketball Court · Batch 1B", cls:"sport"},
+          b2:{label:"🏓 Pickleball", fac:"Pickleball Court · Batch 2B", cls:"sport"}},
+        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      ]
+    },
+    {
+      num: 5, weekday: "Friday", date: "3 July", venue: null,
+      ticks: ["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
+      slots: [
+        {type:"meal",  start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
+        {type:"split", start:"09:00", end:"11:00",
+          b1:{label:"Film Appreciation",                           fac:"Ramna Walia",    tag:"Media & Journalism"},
+          b2:{label:"Through the Kaleidoscope of Neurodiversity", fac:"Abha Basargekar", tag:"Psychology"}},
+        {type:"snack", start:"11:00", end:"11:30", label:"☕ Snacks"},
+        {type:"split", start:"11:30", end:"13:30",
+          b1:{label:"Colours in Nature",              fac:"Atul Joshi",   tag:"Physical & Natural Sciences"},
+          b2:{label:"Entrepreneurs Are Made, Not Born", fac:"Vishal Shah", tag:"Entrepreneurship"}},
+        {type:"meal",  start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
+        {type:"split", start:"14:30", end:"16:30",
+          b1:{label:"Writing as a Form of Thinking", fac:"Labanya Unni",  tag:"Academic Writing"},
+          b2:{label:"Film Appreciation",             fac:"Ramna Walia",   tag:"Media & Journalism"}},
+        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack"},
+        {type:"free",   start:"17:00", end:"18:00", label:"Free Time"},
+        {type:"split",  start:"18:00", end:"19:00",
+          b1:{label:"🏓 Pickleball", fac:"Pickleball Court · Batch 1A", cls:"sport"},
+          b2:{label:"🏀 Basketball", fac:"Basketball Court · Batch 2A", cls:"sport"}},
+        {type:"split",  start:"19:00", end:"20:00",
+          b1:{label:"🏓 Pickleball", fac:"Pickleball Court · Batch 1B", cls:"sport"},
+          b2:{label:"🏀 Basketball", fac:"Basketball Court · Batch 2B", cls:"sport"}},
+        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      ]
+    },
+    {
+      num: 6, weekday: "Saturday", date: "4 July", venue: null,
+      ticks: ["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
+      slots: [
+        {type:"meal",  start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
+        {type:"split", start:"09:00", end:"11:00",
+          b1:{label:"Through the Kaleidoscope of Neurodiversity", fac:"Abha Basargekar",    tag:"Psychology"},
+          b2:{label:"Introduction to Game Theory: Thinking Strategically", fac:"Arun Kumar Kaushik", tag:"Economics"}},
+        {type:"snack", start:"11:00", end:"11:30", label:"☕ Snacks & FUSIP in Frames AMA"},
+        {type:"split", start:"11:30", end:"13:30",
+          b1:{label:"Introduction to Virtual and Augmented Reality",                 fac:"Rahul Ray",     tag:"Computing & Data Science"},
+          b2:{label:"Climate Solutions: Integrating Scientific Insight into Public Policy", fac:"Anjal Prakash", tag:"Public Policy"}},
+        {type:"meal",  start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
+        {type:"split", start:"14:30", end:"16:30",
+          b1:{label:"Climate Solutions: Integrating Scientific Insight into Public Policy", fac:"Anjal Prakash", tag:"Public Policy"},
+          b2:{label:"Introduction to Virtual and Augmented Reality",                 fac:"Rahul Ray",     tag:"Computing & Data Science"}},
+        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack"},
+        {type:"well",   start:"17:00", end:"18:00", label:"Wonders of Wellness 2", fac:"Suniti Vadalkar · APJ Design Lab · 25 students"},
+        {type:"split",  start:"18:00", end:"19:00",
+          b1:{label:"⚽ Futsal",    fac:"Futsal Court · Batch 1A",    cls:"sport"},
+          b2:{label:"🏸 Badminton", fac:"Badminton Court · Batch 2A", cls:"sport"}},
+        {type:"split",  start:"19:00", end:"20:00",
+          b1:{label:"⚽ Futsal",    fac:"Futsal Court · Batch 1B",    cls:"sport"},
+          b2:{label:"🏸 Badminton", fac:"Badminton Court · Batch 2B", cls:"sport"}},
+        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      ]
+    },
+    {
+      num: 7, weekday: "Sunday", date: "5 July", venue: null,
+      ticks: ["7am","8am","9am","12pm","4:30pm","5pm","8pm","9pm"],
+      slots: [
+        {type:"split", start:"07:00", end:"08:00",
+          b1:{label:"🍽 Early Breakfast", fac:"Before departure", cls:"b1"},
+          b2:{label:"", cls:"empty"}},
+        {type:"split", start:"08:00", end:"09:00",
+          b1:{label:"Pre-Departure Orientation", fac:"Shivakumar Jolad", cls:"orient"},
+          b2:{label:"🏕 Departs for Garud Machi", fac:"Breakfast served at camp", cls:"trip"}},
+        {type:"asym", start:"09:00", end:"20:00",
+          tall:{side:"b2", label:"🏕 High Places Outdoor Camp", fac:"Garud Machi", tag:"Returns at dinner", cls:"trip"},
+          stack:[
+            {start:"09:00", end:"16:30", label:"🌾 Rural Immersion", fac:"Field trip",  tag:"Returns 4:30 pm", cls:"trip"},
+            {start:"16:30", end:"17:00", label:"☕ Evening Snack",    fac:"",            tag:"",               cls:"snack"},
+            {start:"17:00", end:"20:00", label:"Free Time",           fac:"",            tag:"",               cls:"free"},
+          ]},
+        {type:"meal", start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      ]
+    },
+    {
+      num: 8, weekday: "Monday", date: "6 July", venue: null,
+      ticks: ["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
+      slots: [
+        {type:"meal",  start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
+        {type:"split", start:"09:00", end:"11:00",
+          b1:{label:"Consciousness and God",          fac:"Michael Hatcher", tag:"Philosophy"},
+          b2:{label:"Writing as a Form of Thinking", fac:"Labanya Unni",    tag:"Academic Writing"}},
+        {type:"snack", start:"11:00", end:"11:30", label:"☕ Snacks & FUSIP in Frames AMA"},
+        {type:"split", start:"11:30", end:"13:30",
+          b1:{label:"Learning by Doing / Idea Visualization", fac:"Pathik Desai · APJ Design Lab\nShamit Shrivastav · APJ 104", tag:"Design"},
+          b2:{label:"Design Thinking through Storytelling",   fac:"Sherline Pimenta", tag:"Design"}},
+        {type:"meal",  start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
+        {type:"split", start:"14:30", end:"16:30",
+          b1:{label:"Design Thinking through Storytelling",   fac:"Sherline Pimenta", tag:"Design"},
+          b2:{label:"Learning by Doing / Idea Visualization", fac:"Pathik Desai · APJ Design Lab\nShamit Shrivastav · APJ 104", tag:"Design"}},
+        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack & FUSIP in Frames AMA"},
+        {type:"free",   start:"17:00", end:"18:00", label:"Free Time"},
+        {type:"split",  start:"18:00", end:"19:00",
+          b1:{label:"🏸 Badminton", fac:"Badminton Court · Batch 1A", cls:"sport"},
+          b2:{label:"⚽ Futsal",    fac:"Futsal Court · Batch 2A",    cls:"sport"}},
+        {type:"split",  start:"19:00", end:"20:00",
+          b1:{label:"🏸 Badminton", fac:"Badminton Court · Batch 1B", cls:"sport"},
+          b2:{label:"⚽ Futsal",    fac:"Futsal Court · Batch 2B",    cls:"sport"}},
+        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      ]
+    },
+    {
+      num: 9, weekday: "Tuesday", date: "7 July", venue: null,
+      ticks: ["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","8pm","9pm"],
+      slots: [
+        {type:"meal",  start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
+        {type:"split", start:"09:00", end:"11:00",
+          b1:{label:"Applied AI: Building and Learning with AI", fac:"Sorabh Bajaj",   tag:"Digital Learning"},
+          b2:{label:"Consciousness and God",                     fac:"Michael Hatcher", tag:"Philosophy"}},
+        {type:"snack", start:"11:00", end:"11:30", label:"☕ Snacks"},
+        {type:"split", start:"11:30", end:"13:30",
+          b1:{label:"Technology & Society",          fac:"Mayurakshi Chaudhuri", tag:"Sociology"},
+          b2:{label:"Reading Literature: Why and How", fac:"Tarinee Awasthi",     tag:"Literary & Cultural Studies"}},
+        {type:"meal",  start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
+        {type:"split", start:"14:30", end:"16:30",
+          b1:{label:"Reading Literature: Why and How", fac:"Tarinee Awasthi",     tag:"Literary & Cultural Studies"},
+          b2:{label:"Technology & Society",            fac:"Mayurakshi Chaudhuri", tag:"Sociology"}},
+        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack"},
+        {type:"well",   start:"17:00", end:"18:00", label:"Wonders of Wellness 3", fac:"Suniti Vadalkar · APJ Design Lab · 25 students"},
+        {type:"free",   start:"18:00", end:"20:00", label:"Free Time"},
+        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      ]
+    },
+    {
+      num: 10, weekday: "Wednesday", date: "8 July", venue: "📍 Shantiniketan",
+      ticks: ["7am","8am","9am","12:30pm","1:30pm"],
+      slots: [
+        {type:"shared", start:"07:00", end:"08:00", label:"Room Keys Handover"},
+        {type:"meal",   start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
+        {type:"orient", start:"09:00", end:"12:30", label:"Presentations"},
+        {type:"snack",  start:"12:30", end:"13:30", label:"☕ Snacks & Distribution of Certificates"},
+        {type:"end",    start:"13:30", end:"14:00", label:"Program ends — students depart with parents"},
+      ]
+    },
+  ]
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// RENDERING ENGINE
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Timeline constants
+const DAY_START = 7 * 60;   // 7:00 am in minutes
+const DAY_END   = 21 * 60;  // 9:00 pm in minutes
+const SPAN      = DAY_END - DAY_START;
+const GRID_H    = 420;      // px — total timeline grid height
+const GAP       = 2;        // px — gap between slots
+
+function toMins(hhmm) {
+  const [h, m] = hhmm.split(':').map(Number);
+  return h * 60 + m;
+}
+function yPos(mins) {
+  return ((mins - DAY_START) / SPAN) * GRID_H;
+}
+function slotTop(startMins)  { return yPos(startMins) + GAP; }
+function slotHt(startMins, endMins, minHt = 14) {
+  return Math.max(yPos(endMins) - yPos(startMins) - GAP, minHt);
+}
+
+function parseTick(label) {
+  // Convert "7am", "11:30am", "1:30pm" etc → minutes
+  const pm = label.includes('pm');
+  const [timePart] = label.split(/(am|pm)/);
+  const [h, m = '0'] = timePart.split(':');
+  let hr = parseInt(h);
+  if (pm && hr !== 12) hr += 12;
+  if (!pm && hr === 12) hr = 0;
+  return hr * 60 + parseInt(m);
+}
+
+function slotClass(type) {
+  const map = {
+    meal:'s-meal', snack:'s-snack', free:'s-free', shared:'s-shared',
+    orient:'s-orient', trip:'s-trip', sport:'s-sport', well:'s-well', end:'s-end'
+  };
+  return map[type] || 's-shared';
+}
+function halfClass(cls) {
+  const map = {
+    b1:'h-b1', b2:'h-b2', trip:'h-trip', orient:'h-orient',
+    snack:'h-snack', free:'h-free', sport:'h-sport', empty:'h-empty'
+  };
+  return map[cls] || 'h-b1';
+}
+
+function renderSlot(s) {
+  const sm = toMins(s.start), em = toMins(s.end);
+  const top = slotTop(sm), ht = slotHt(sm, em);
+
+  if (s.type === 'meal') {
+    return `<div class="slot s-meal" style="top:${top}px;height:${ht}px;">
+      <span class="meal-icon">${s.icon||'🍽'}</span>
+      <span class="slot-name">${s.label}</span>
+    </div>`;
+  }
+  if (s.type === 'snack' || s.type === 'free' || s.type === 'shared' ||
+      s.type === 'orient' || s.type === 'trip' || s.type === 'sport' ||
+      s.type === 'well' || s.type === 'end') {
+    const cls = slotClass(s.type);
+    const fac = s.fac ? `<span class="slot-fac">${s.fac}</span>` : '';
+    const sub = s.sub ? `<span class="slot-fac">${s.sub}</span>` : '';
+    return `<div class="slot ${cls}" style="top:${top}px;height:${ht}px;">
+      <span class="slot-name">${s.label}</span>${fac}${sub}
+    </div>`;
+  }
+  if (s.type === 'split') {
+    const splitTop = yPos(sm) + GAP;
+    const splitHt  = Math.max(yPos(em) - yPos(sm) - GAP, 14);
+    function half(h) {
+      if (!h) return '';
+      const hcls = halfClass(h.cls || (h === s.b1 ? 'b1' : 'b2'));
+      const fac  = h.fac  ? `<span class="slot-fac" style="white-space:pre-line">${h.fac}</span>` : '';
+      const tag  = h.tag  ? `<span class="slot-tag">${h.tag}</span>` : '';
+      const name = h.label ? `<span class="slot-name">${h.label}</span>` : '';
+      return `<div class="half ${hcls}" style="height:${splitHt}px;">${name}${fac}${tag}</div>`;
+    }
+    return `<div class="slot-split" style="top:${splitTop}px;height:${splitHt}px;">
+      ${half(s.b1)}${half(s.b2)}
+    </div>`;
+  }
+  if (s.type === 'asym') {
+    const asymTop = yPos(sm) + GAP;
+    const asymHt  = Math.max(yPos(em) - yPos(sm) - GAP, 14);
+    const t = s.tall;
+    const tallCls = t.cls ? halfClass(t.cls) : (t.side === 'b1' ? 'h-b1' : 'h-b2');
+    const tallHtml = `<div class="asym-tall ${tallCls}" style="height:${asymHt}px;">
+      <span class="slot-name">${t.label}</span>
+      ${t.fac ? `<span class="slot-fac">${t.fac}</span>` : ''}
+      ${t.tag ? `<span class="slot-tag">${t.tag}</span>` : ''}
+    </div>`;
+    const stackCells = s.stack.map(sub => {
+      const subSm  = toMins(sub.start), subEm = toMins(sub.end);
+      const subTop = yPos(subSm) - yPos(sm) + GAP;
+      const subHt  = Math.max(yPos(subEm) - yPos(subSm) - GAP, 14);
+      const scls   = sub.cls ? halfClass(sub.cls) : (t.side === 'b1' ? 'h-b2' : 'h-b1');
+      return `<div class="asym-sub ${scls}" style="top:${subTop}px;height:${subHt}px;">
+        <span class="slot-name">${sub.label}</span>
+        ${sub.fac ? `<span class="slot-fac">${sub.fac}</span>` : ''}
+        ${sub.tag ? `<span class="slot-tag">${sub.tag}</span>` : ''}
+      </div>`;
+    }).join('');
+    const stackHtml = `<div class="asym-stack" style="height:${asymHt}px;">${stackCells}</div>`;
+    const [left, right] = t.side === 'b1' ? [tallHtml, stackHtml] : [stackHtml, tallHtml];
+    return `<div class="slot-asym" style="top:${asymTop}px;height:${asymHt}px;">${left}${right}</div>`;
+  }
+  return '';
+}
+
+function renderDay(day) {
+  // Build ticks
+  const tickMins  = day.ticks.map(parseTick);
+  const ticksHtml = tickMins.map(m =>
+    `<div class="tick" style="top:${yPos(m)}px;">${day.ticks[tickMins.indexOf(m)]}</div>`
+  ).join('');
+
+  // Horizontal hour lines
+  const hlinesHtml = Array.from({length:14}, (_,i) => (i+8)*60)
+    .filter(m => m <= DAY_END)
+    .map(m => `<div class="hline" style="top:${yPos(m)}px;"></div>`)
+    .join('');
+
+  const slotsHtml = day.slots.map(renderSlot).join('');
+
+  const venueLine = day.venue
+    ? `<div class="day-venue"><span>${day.venue}</span></div>` : '';
+
+  return `
+  <div class="day-panel" id="day-${day.num}" data-day="${day.num}">
+    <div class="day-header">
+      <div class="day-header-row">
+        <span class="day-label">Day ${day.num}</span>
+        <span class="day-date">${day.weekday} · ${day.date}</span>
+      </div>
+      ${venueLine}
+    </div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-swatch sw-b1"></span>${SCHEDULE.batch1}</div>
+      <div class="legend-item"><span class="legend-swatch sw-b2"></span>${SCHEDULE.batch2}</div>
+    </div>
+    <div class="timeline">
+      <div class="time-axis" style="height:${GRID_H}px;" id="axis-${day.num}">${ticksHtml}</div>
+      <div class="grid" style="height:${GRID_H}px;" id="grid-${day.num}">
+        ${hlinesHtml}
+        ${slotsHtml}
+        <div class="now-line" id="now-${day.num}" style="display:none;">
+          <span class="now-pill" id="now-pill-${day.num}"></span>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── FIND CURRENT DAY ──────────────────────────────────────────────────────
+// Programme dates: Day 1 = 29 June 2026, Day 10 = 8 July 2026
+const PROG_START = new Date('2026-06-29');
+function getCurrentDay() {
+  const now = new Date();
+  const diff = Math.floor((now - PROG_START) / (1000 * 60 * 60 * 24));
+  if (diff >= 0 && diff < 10) return diff + 1;
+  return null;
+}
+function isToday(dayNum) {
+  return getCurrentDay() === dayNum;
+}
+
+// ─── NOW LINE ──────────────────────────────────────────────────────────────
+function updateNowLine() {
+  const todayNum = getCurrentDay();
+  if (!todayNum) return;
+  const now = new Date();
+  const mins = now.getHours() * 60 + now.getMinutes();
+  const inRange = mins >= DAY_START && mins <= DAY_END;
+  const line = document.getElementById(`now-${todayNum}`);
+  const pill = document.getElementById(`now-pill-${todayNum}`);
+  if (!line || !pill) return;
+  if (!inRange) { line.style.display = 'none'; return; }
+  const top = yPos(mins);
+  line.style.top    = `${top}px`;
+  line.style.display = 'flex';
+  const h12 = now.getHours() % 12 || 12;
+  const ampm = now.getHours() < 12 ? 'am' : 'pm';
+  const mm   = String(now.getMinutes()).padStart(2, '0');
+  pill.textContent = `${h12}:${mm}${ampm}`;
+}
+
+// ─── NAVIGATION ────────────────────────────────────────────────────────────
+let activeDay = 1;
+
+function activateDay(num, scroll = true) {
+  activeDay = num;
+  // Update pills
+  document.querySelectorAll('.day-pill').forEach(p => {
+    p.classList.toggle('active', parseInt(p.dataset.day) === num);
+  });
+  // Update panels
+  document.querySelectorAll('.day-panel').forEach(p => {
+    p.classList.toggle('active', parseInt(p.dataset.day) === num);
+  });
+  // Scroll pill into view
+  if (scroll) {
+    const pill = document.querySelector(`.day-pill[data-day="${num}"]`);
+    if (pill) pill.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
+  updateNowLine();
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+function init() {
+  const strip = document.getElementById('day-strip');
+  const main  = document.getElementById('main');
+
+  // Build day pills
+  SCHEDULE.days.forEach(day => {
+    const today = isToday(day.num);
+    const pill = document.createElement('button');
+    pill.className  = 'day-pill' + (today ? ' today-pill' : '');
+    pill.dataset.day = day.num;
+    pill.innerHTML  = `
+      <span class="pill-num">${day.num}</span>
+      <span class="pill-day">${day.weekday.slice(0,3)}</span>
+      ${today ? '<span class="today-dot"></span>' : ''}
+    `;
+    pill.addEventListener('click', () => activateDay(day.num));
+    strip.appendChild(pill);
+  });
+
+  // Render all day panels
+  main.innerHTML = SCHEDULE.days.map(renderDay).join('');
+
+  // Pick start day
+  const todayNum = getCurrentDay();
+  activateDay(todayNum || 1, true);
+
+  // Live now line — update every minute
+  updateNowLine();
+  setInterval(updateNowLine, 60000);
+}
+
+// ─── SHARE ─────────────────────────────────────────────────────────────────
+function shareWhatsApp() {
+  const url  = encodeURIComponent(window.location.href);
+  const text = encodeURIComponent('FUSIP 2026 Timetable — check what\'s on today! ');
+  window.open(`https://wa.me/?text=${text}${url}`, '_blank');
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
