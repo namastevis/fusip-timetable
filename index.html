@@ -161,7 +161,7 @@ html, body {
 .pill.active .today-dot { background: #fff; }
 
 /* ─── DAY PANEL ────────────────────────────────────────────────────────────── */
-main { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; touch-action: pan-y; }
+main { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
 
 .panel { display: none; flex: 1 1 0; min-height: 0; flex-direction: column; }
 .panel.active { display: flex; }
@@ -486,7 +486,7 @@ body.filter-b2 [data-batch="b1"] { opacity: 0.12; filter: grayscale(1); pointer-
 </div>
 <script>
 // ═══════════════════════════════════════════════════════════════════════
-// SCHEDULE DATA
+// SCHEDULE DATA  — edit this block to update any session, time or name
 // ═══════════════════════════════════════════════════════════════════════
 const S = {
   b1: "Batch 1 (CHK 001)",
@@ -728,7 +728,7 @@ const S = {
 };
 
 // ═══════════════════════════════════════════════════════════════════════
-// RENDERING & SWIPE LOGIC
+// RENDERING — pure CSS % positioning, no JS pixel measurement
 // ═══════════════════════════════════════════════════════════════════════
 const DS = 7*60, DE = 21*60, SPAN = DE-DS;
 
@@ -763,6 +763,7 @@ function renderSlot(sl) {
     const hh = (h,def)=>{
       if(!h||(!h.label&&h.cls==='empty'&&!h.innerSplit)) return `<div class="h h-empty" data-batch="${def}"></div>`;
       const c = HCLS[h.cls||def]||'hb1';
+      // Inner split: two mini boxes side by side within this half
       if (h.innerSplit) {
         const subs = h.innerSplit.map(s=>
           `<div class="isub">
@@ -784,7 +785,7 @@ function renderSlot(sl) {
   if (sl.t==='asym') {
     const T=sl.tall, sm=tm(sl.s||sl.start), em=tm(sl.e||sl.end), span=em-sm;
     const tallCls = HCLS[T.cls||T.side]||'hb1';
-    const tallBatch = T.side;   
+    const tallBatch = T.side;   // 'b1' or 'b2'
     const stackBatch = T.side==='b1' ? 'b2' : 'b1';
     const tallHtml = `<div class="h ${tallCls}" data-batch="${tallBatch}" style="height:100%;">
       <span class="sn">${T.label}</span>
@@ -843,6 +844,9 @@ function renderDay(day) {
   </div>`;
 }
 
+// ═══════════════════════════════════════════════════════════════════════
+// CONTROLLER
+// ═══════════════════════════════════════════════════════════════════════
 const PROG = new Date('2026-06-29');
 function todayNum() {
   const d = Math.floor((new Date()-PROG)/(864e5));
@@ -861,22 +865,6 @@ function updateNow() {
 }
 
 let cur=1;
-
-const SwipeHandler = {
-  startX: 0,
-  init() {
-    const main = document.getElementById('main');
-    main.addEventListener('touchstart', e => { this.startX = e.changedTouches[0].screenX; }, {passive: true});
-    main.addEventListener('touchend', e => {
-      const diff = e.changedTouches[0].screenX - this.startX;
-      if (Math.abs(diff) > 50) {
-        if (diff > 0 && cur > 1) go(cur - 1);       
-        else if (diff < 0 && cur < S.days.length) go(cur + 1); 
-      }
-    }, {passive: true});
-  }
-};
-
 function go(n,scroll=true){
   cur=n;
   document.querySelectorAll('.pill').forEach(p=>p.classList.toggle('active',+p.dataset.n===n));
@@ -899,16 +887,15 @@ function init(){
     strip.appendChild(btn);
   });
   main.innerHTML=S.days.map(renderDay).join('');
-  
-  SwipeHandler.init();
-  
   go(tn||1,true);
   updateNow();
   setInterval(updateNow,60000);
 }
 
+// ─── BATCH FILTER ───────────────────────────────────────────────────────────
 let curFilter = 'both';
 function setFilter(f) {
+  // Clicking the already-active filter toggles it back to 'both'
   if (f !== 'both' && curFilter === f) f = 'both';
   curFilter = f;
   document.body.classList.remove('filter-b1','filter-b2');
