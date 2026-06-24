@@ -16,6 +16,14 @@
   --teal-lt:   #a8d5e2;
   --parch:     #f5f0e8;
   --parch-dk:  #e8e0d0;
+  /* Batch colours — blue for B1, violet for B2 */
+  --b1:        #4A90D9;
+  --b1-lt:     #EBF4FF;
+  --b1-txt:    #1a4a7a;
+  --b2:        #7B5EA7;
+  --b2-lt:     #F3EEFF;
+  --b2-txt:    #3d1f6e;
+  /* Legacy refs kept for header/pill only */
   --coral:     #e07060;
   --coral-lt:  #fae8e5;
   --gold:      #c9a227;
@@ -23,13 +31,16 @@
   --ink:       #1a1a2e;
   --muted:     #6b7280;
   --white:     #ffffff;
-  --snack-bg:  #fef4e3; --snack-bd: #e0a030;
-  --meal-bg:   #fff8ee; --meal-bd:  #f0b860;
-  --free-bg:   #eff5f0; --free-bd:  #8ab8a0;
-  --orient-bg: #e8f4ec; --orient-bd:#40a060;
-  --trip-bg:   #fff0e0; --trip-bd:  #e08030;
-  --sport-bg:  #eef3fb; --sport-bd: #5080c0;
-  --well-bg:   #f0eef8; --well-bd:  #8070c0;
+  /* Unified meal/snack colour */
+  --food-bg:   #FFF8EE; --food-bd: #E8A838;
+  --food-txt:  #7a4a10;
+  /* Free time */
+  --free-bg:   #eff5f0; --free-bd: #8ab8a0; --free-txt: #4a7a5a;
+  /* Sports neutral background */
+  --sport-bg:  #F0F4F8;
+  /* Wellness — keep purple */
+  --well-bg:   #FFF0F3; --well-bd: #C0607A; --well-txt: #7a2040;
+  /* Shared/teal slots */
   --shared-bg: #dde8ec; --shared-bd:#1a4a5c;
   --gap:    3px;
   --radius: 6px;
@@ -170,18 +181,41 @@ main { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
 .daydate  { font-size: 0.72rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
 .dayvenue { font-size: 0.68rem; color: var(--teal-mid); font-weight: 500; margin-top: 2px; }
 
-/* ─── LEGEND ───────────────────────────────────────────────────────────────── */
+/* ─── LEGEND / FILTER BAR ──────────────────────────────────────────────────── */
 .legend {
-  display: flex; gap: 14px;
+  display: flex; gap: 6px; align-items: center;
   padding: 5px 14px;
   background: var(--parch-dk);
   border-bottom: 1px solid rgba(0,0,0,0.05);
   flex-shrink: 0;
 }
-.leg-item { display: flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 600; color: #333; }
-.leg-sw { width: 10px; height: 10px; border-radius: 2px; }
-.sw1 { background: var(--coral); }
-.sw2 { background: var(--gold);  }
+.leg-label { font-size: 0.62rem; font-weight: 600; color: var(--muted); margin-right: 2px; }
+.ftog {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 0.68rem; font-weight: 600; color: #444;
+  background: rgba(0,0,0,0.06);
+  border: 1.5px solid transparent;
+  border-radius: 20px;
+  padding: 3px 9px 3px 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
+  white-space: nowrap;
+}
+.ftog .leg-sw { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+.sw1 { background: var(--b1); }
+.sw2 { background: var(--b2); }
+.ftog-both { padding: 3px 10px; }
+
+/* Active states */
+.ftog-both.factive   { background: var(--teal); color: #fff; border-color: var(--teal); }
+.ftog-b1.factive     { background: var(--coral-lt); border-color: var(--coral); color: #8b2010; }
+.ftog-b2.factive     { background: var(--gold-lt);  border-color: var(--gold);  color: #7a5a00; }
+
+/* ─── BATCH DIMMING — targets data-batch attribute set during render ─────── */
+body.filter-b1 [data-batch="b2"] { opacity: 0.12; filter: grayscale(1); pointer-events: none; }
+body.filter-b2 [data-batch="b1"] { opacity: 0.12; filter: grayscale(1); pointer-events: none; }
 
 /* ─── TIMELINE (CSS-PERCENTAGE BASED — FILLS SCREEN, NO SCROLL) ──────────── */
 .timeline {
@@ -241,27 +275,28 @@ main { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
 .sf { font-size: 0.6rem; line-height: 1.2; margin-top: 1px; opacity: 0.8; font-weight: 500; }
 .st { font-size: 0.54rem; margin-top: auto; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; opacity: 0.65; }
 
-.s-meal   { background:var(--meal-bg);   border-left:3px solid var(--meal-bd);   flex-direction:row; align-items:center; gap:4px; }
-.s-meal   .sn { color:#8b6020; font-size:0.72rem; }
+/* ─── FULL-WIDTH SLOT THEMES ───────────────────────────────────────────────── */
+.s-meal   { background:var(--food-bg);   border-left:3px solid var(--food-bd);   flex-direction:row; align-items:center; gap:4px; }
+.s-meal   .sn { color:var(--food-txt); font-size:0.72rem; }
 .s-meal   .mi { font-size:0.85rem; flex-shrink:0; }
-.s-snack  { background:var(--snack-bg);  border-left:3px solid var(--snack-bd);  justify-content:center; }
-.s-snack  .sn { color:#7a5010; font-size:0.63rem; letter-spacing:-0.01em; }
+.s-snack  { background:var(--food-bg);   border-left:3px solid var(--food-bd);   justify-content:center; }
+.s-snack  .sn { color:var(--food-txt); font-size:0.63rem; letter-spacing:-0.01em; }
 .s-free   { background:var(--free-bg);   border-left:3px solid var(--free-bd);   }
-.s-free   .sn { color:#4a7a5a; }
+.s-free   .sn { color:var(--free-txt); }
 .s-shared { background:var(--shared-bg); border-left:3px solid var(--shared-bd); }
 .s-shared .sn { color:var(--teal); }
 .s-shared .sf { color:var(--teal-mid); }
-.s-orient { background:var(--orient-bg); border-left:3px solid var(--orient-bd); }
-.s-orient .sn { color:#205030; }
-.s-trip   { background:var(--trip-bg);   border-left:3px solid var(--trip-bd);   }
-.s-trip   .sn { color:#704010; }
-.s-trip   .sf { color:#906030; opacity:1; }
-.s-sport  { background:var(--sport-bg);  border-left:3px solid var(--sport-bd);  }
-.s-sport  .sn { color:#2a4080; }
-.s-sport  .sf { color:#5070a0; opacity:1; }
+.s-orient { background:var(--b2-lt);     border-left:3px solid var(--b2);        }
+.s-orient .sn { color:var(--b2-txt); }
+.s-trip   { background:var(--b1-lt);     border-left:3px solid var(--b1);        }
+.s-trip   .sn { color:var(--b1-txt); }
+.s-trip   .sf { color:var(--b1-txt); opacity:0.75; }
+.s-sport  { background:var(--sport-bg);  border-left:3px solid var(--b1);        }
+.s-sport  .sn { color:var(--b1-txt); }
+.s-sport  .sf { color:var(--b1-txt); opacity:0.75; }
 .s-well   { background:var(--well-bg);   border-left:3px solid var(--well-bd);   }
-.s-well   .sn { color:#503080; }
-.s-well   .sf { color:#7060a0; opacity:1; }
+.s-well   .sn { color:var(--well-txt); }
+.s-well   .sf { color:var(--well-txt); opacity:0.8; }
 .s-end    { background:transparent; border:none; border-top:2px dashed var(--parch-dk); border-radius:0; padding:3px 0 0; }
 .s-end    .sn { color:var(--muted); font-style:italic; font-weight:500; }
 
@@ -294,19 +329,34 @@ main { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
 .h .sn { font-size: 0.63rem; font-weight: 700; line-height: 1.15; color: var(--ink); }
 .h .sf { font-size: 0.57rem; line-height: 1.2;  margin-top: 2px;  color: #444; font-weight: 500; }
 .h .st { font-size: 0.5rem;  margin-top: auto; font-weight: 600;  text-transform: uppercase; color: #666; }
-.hb1 { background:var(--coral-lt); border-left:3px solid var(--coral); }
-.hb2 { background:var(--gold-lt);  border-left:3px solid var(--gold);  }
-.h-trip   { background:var(--trip-bg);   border-left:3px solid var(--trip-bd); }
-.h-orient { background:var(--orient-bg); border-left:3px solid var(--orient-bd); }
-.h-snack  { background:var(--snack-bg);  border-left:3px solid var(--snack-bd); justify-content:center; }
-.h-free   { background:var(--free-bg);   border-left:3px solid var(--free-bd);  }
-.h-sport  { background:var(--sport-bg);  border-left:3px solid var(--sport-bd); }
+/* Batch academic colours */
+.hb1 { background:var(--b1-lt); border-left:3px solid var(--b1); }
+.hb2 { background:var(--b2-lt); border-left:3px solid var(--b2); }
+.hb1 .sn { color:var(--b1-txt); } .hb1 .sf { color:var(--b1-txt); opacity:0.75; }
+.hb2 .sn { color:var(--b2-txt); } .hb2 .sf { color:var(--b2-txt); opacity:0.75; }
+/* Trip/orient follow batch colour via data-batch */
+.h-trip                      { background:var(--b1-lt); border-left:3px solid var(--b1); }
+.h-trip[data-batch="b2"]     { background:var(--b2-lt); border-left:3px solid var(--b2); }
+.h-orient                    { background:var(--b2-lt); border-left:3px solid var(--b2); }
+.h-orient[data-batch="b1"]   { background:var(--b1-lt); border-left:3px solid var(--b1); }
+.h-trip .sn                  { color:var(--b1-txt); } .h-trip .sf { color:var(--b1-txt); opacity:0.75; }
+.h-trip[data-batch="b2"] .sn { color:var(--b2-txt); } .h-trip[data-batch="b2"] .sf { color:var(--b2-txt); opacity:0.75; }
+.h-orient .sn                { color:var(--b2-txt); } .h-orient .sf { color:var(--b2-txt); opacity:0.75; }
+.h-orient[data-batch="b1"] .sn { color:var(--b1-txt); } .h-orient[data-batch="b1"] .sf { color:var(--b1-txt); opacity:0.75; }
+/* Food unified */
+.h-snack  { background:var(--food-bg); border-left:3px solid var(--food-bd); justify-content:center; }
+.h-snack  .sn { color:var(--food-txt); font-size:0.6rem; }
+/* Free time */
+.h-free   { background:var(--free-bg); border-left:3px solid var(--free-bd); }
+.h-free   .sn { color:var(--free-txt); }
+/* Sports: B1 left=blue, B2 left=violet, both neutral background */
+.h-sport  { background:var(--sport-bg); border-left:3px solid var(--b1); }
+.h-sport  .sn { color:var(--b1-txt); } .h-sport  .sf { color:var(--b1-txt); opacity:0.75; }
+.h-sport[data-batch="b2"] { border-left-color:var(--b2); }
+.h-sport[data-batch="b2"] .sn { color:var(--b2-txt); }
+.h-sport[data-batch="b2"] .sf { color:var(--b2-txt); opacity:0.75; }
+/* Empty */
 .h-empty  { background:transparent; border:none; box-shadow:none; }
-.h-trip   .sn { color:#704010; } .h-trip   .sf { color:#906030; }
-.h-orient .sn { color:#205030; }
-.h-snack  .sn { color:#7a5010; font-size:0.6rem; }
-.h-free   .sn { color:#4a7a5a; }
-.h-sport  .sn { color:#2a4080; } .h-sport  .sf { color:#5070a0; }
 
 /* ─── ASYMMETRIC SLOT ──────────────────────────────────────────────────────── */
 .astack { position: relative; width: 100%; height: 100%; flex-shrink: 0; }
@@ -325,6 +375,17 @@ main { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
 .asub .sn { font-size: 0.63rem; font-weight: 700; line-height: 1.15; color: var(--ink); }
 .asub .sf { font-size: 0.57rem; line-height: 1.2;  margin-top: 2px;  color: #444; }
 .asub .st { font-size: 0.5rem;  margin-top: auto; font-weight: 600; text-transform: uppercase; color: #666; }
+/* Trip sub-cells follow batch colour */
+.asub.h-trip[data-batch="b1"] { background:var(--b1-lt); border-left:3px solid var(--b1); }
+.asub.h-trip[data-batch="b1"] .sn { color:var(--b1-txt); }
+.asub.h-trip[data-batch="b2"] { background:var(--b2-lt); border-left:3px solid var(--b2); }
+.asub.h-trip[data-batch="b2"] .sn { color:var(--b2-txt); }
+/* Food sub-cells */
+.asub.h-snack { background:var(--food-bg); border-left:3px solid var(--food-bd); justify-content:center; }
+.asub.h-snack .sn { color:var(--food-txt); font-size:0.6rem; }
+/* Free sub-cells */
+.asub.h-free  { background:var(--free-bg); border-left:3px solid var(--free-bd); }
+.asub.h-free  .sn { color:var(--free-txt); }
 
 /* ─── NOW LINE ─────────────────────────────────────────────────────────────── */
 .nowline {
@@ -465,8 +526,8 @@ const S = {
           b1:{label:"",cls:"empty"},
           b2:{label:"🍽 Early Breakfast",fac:"Before departure",cls:"b2"}},
         {t:"split",s:"08:00",e:"09:00",
-          b1:{label:"🏕 Departs for Garud Machi",fac:"Breakfast served at camp",cls:"trip"},
-          b2:{label:"Pre-Departure Orientation",fac:"Shivakumar Jolad",cls:"orient"}},
+          b1:{label:"🏕 Departs for Garud Machi",fac:"Breakfast served at camp",cls:"b1"},
+          b2:{label:"Pre-Departure Orientation",fac:"Shivakumar Jolad",cls:"b2"}},
         {t:"asym",s:"09:00",e:"20:00",
           tall:{side:"b1",label:"🏕 High Places Outdoor Camp",fac:"Garud Machi",tag:"Returns at dinner",cls:"trip"},
           stack:[
@@ -569,8 +630,8 @@ const S = {
           b1:{label:"🍽 Early Breakfast",fac:"Before departure",cls:"b1"},
           b2:{label:"",cls:"empty"}},
         {t:"split",s:"08:00",e:"09:00",
-          b1:{label:"Pre-Departure Orientation",fac:"Shivakumar Jolad",cls:"orient"},
-          b2:{label:"🏕 Departs for Garud Machi",fac:"Breakfast served at camp",cls:"trip"}},
+          b1:{label:"Pre-Departure Orientation",fac:"Shivakumar Jolad",cls:"b1"},
+          b2:{label:"🏕 Departs for Garud Machi",fac:"Breakfast served at camp",cls:"b2"}},
         {t:"asym",s:"09:00",e:"20:00",
           tall:{side:"b2",label:"🏕 High Places Outdoor Camp",fac:"Garud Machi",tag:"Returns at dinner",cls:"trip"},
           stack:[
@@ -591,12 +652,12 @@ const S = {
           b2:{label:"Writing as a Form of Thinking",fac:"Labanya Unni",tag:"Academic Writing"}},
         {t:"snack",s:"11:00",e:"11:30",label:"☕ Snacks & FUSIP in Frames AMA"},
         {t:"split",s:"11:30",e:"13:30",
-          b1:{label:"Learning by Doing / Idea Visualization",fac:"Pathik Desai · APJ Design Lab<br>Shamit Shrivastav · APJ 104",tag:"Design"},
+          b1:{label:"Learning by Doing<br><span style='font-size:0.55rem;opacity:0.6;font-weight:600'>Pathik Desai · APJ Design Lab</span><br><span style='font-size:0.6rem;color:var(--b1-txt);font-weight:700'>＋</span><br>Idea Visualization<br><span style='font-size:0.55rem;opacity:0.6;font-weight:600'>Shamit Shrivastav · APJ 104</span>",fac:"",tag:"Design"},
           b2:{label:"Design Thinking through Storytelling",fac:"Sherline Pimenta",tag:"Design"}},
         {t:"meal",s:"13:30",e:"14:30",label:"Lunch",icon:"🍽"},
         {t:"split",s:"14:30",e:"16:30",
           b1:{label:"Design Thinking through Storytelling",fac:"Sherline Pimenta",tag:"Design"},
-          b2:{label:"Learning by Doing / Idea Visualization",fac:"Pathik Desai · APJ Design Lab<br>Shamit Shrivastav · APJ 104",tag:"Design"}},
+          b2:{label:"Learning by Doing<br><span style='font-size:0.55rem;opacity:0.6;font-weight:600'>Pathik Desai · APJ Design Lab</span><br><span style='font-size:0.6rem;color:var(--b2-txt);font-weight:700'>＋</span><br>Idea Visualization<br><span style='font-size:0.55rem;opacity:0.6;font-weight:600'>Shamit Shrivastav · APJ 104</span>",fac:"",tag:"Design"}},
         {t:"snack",s:"16:30",e:"17:00",label:"☕ Evening Snack & FUSIP in Frames AMA"},
         {t:"free", s:"17:00",e:"18:00",label:"Free Time"},
         {t:"split",s:"18:00",e:"19:00",
@@ -678,9 +739,9 @@ function renderSlot(sl) {
   
   if (sl.t==='split') {
     const hh = (h,def)=>{
-      if(!h||(!h.label&&h.cls==='empty')) return `<div class="h h-empty"></div>`;
+      if(!h||(!h.label&&h.cls==='empty')) return `<div class="h h-empty" data-batch="${def}"></div>`;
       const c = HCLS[h.cls||def]||'hb1';
-      return `<div class="h ${c}">${h.label?`<span class="sn">${h.label}</span>`:''
+      return `<div class="h ${c}" data-batch="${def}">${h.label?`<span class="sn">${h.label}</span>`:''
         }${h.fac?`<span class="sf">${h.fac}</span>`:''
         }${h.tag?`<span class="st">${h.tag}</span>`:''}</div>`;
     };
@@ -690,7 +751,9 @@ function renderSlot(sl) {
   if (sl.t==='asym') {
     const T=sl.tall, sm=tm(sl.s||sl.start), em=tm(sl.e||sl.end), span=em-sm;
     const tallCls = HCLS[T.cls||T.side]||'hb1';
-    const tallHtml = `<div class="h ${tallCls}" style="height:100%;">
+    const tallBatch = T.side;   // 'b1' or 'b2'
+    const stackBatch = T.side==='b1' ? 'b2' : 'b1';
+    const tallHtml = `<div class="h ${tallCls}" data-batch="${tallBatch}" style="height:100%;">
       <span class="sn">${T.label}</span>
       ${T.fac?`<span class="sf">${T.fac}</span>`:''}
       ${T.tag?`<span class="st">${T.tag}</span>`:''}
@@ -699,8 +762,8 @@ function renderSlot(sl) {
       const ssm=tm(sub.s||sub.start), sem=tm(sub.e||sub.end);
       const tp=((ssm-sm)/span*100).toFixed(3);
       const ht=((sem-ssm)/span*100).toFixed(3);
-      const c = HCLS[sub.cls||(T.side==='b1'?'b2':'b1')]||'hb1';
-      return `<div class="asub ${c}" style="top:calc(${tp}% + 1px);height:calc(${ht}% - 2px);">
+      const c = HCLS[sub.cls||stackBatch]||'hb1';
+      return `<div class="asub ${c}" data-batch="${stackBatch}" style="top:calc(${tp}% + 1px);height:calc(${ht}% - 2px);">
         <span class="sn">${sub.label}</span>
         ${sub.fac?`<span class="sf">${sub.fac}</span>`:''}
         ${sub.tag?`<span class="st">${sub.tag}</span>`:''}
@@ -729,8 +792,10 @@ function renderDay(day) {
       </div>${venue}
     </div>
     <div class="legend">
-      <div class="leg-item"><span class="leg-sw sw1"></span>${S.b1}</div>
-      <div class="leg-item"><span class="leg-sw sw2"></span>${S.b2}</div>
+      <span class="leg-label">View:</span>
+      <button class="ftog ftog-both factive" onclick="setFilter('both')">Both</button>
+      <button class="ftog ftog-b1" onclick="setFilter('b1')"><span class="leg-sw sw1"></span>${S.b1}</button>
+      <button class="ftog ftog-b2" onclick="setFilter('b2')"><span class="leg-sw sw2"></span>${S.b2}</button>
     </div>
     <div class="timeline">
       <div class="tl-inner">
@@ -793,7 +858,20 @@ function init(){
   setInterval(updateNow,60000);
 }
 
-function shareWA(){
+// ─── BATCH FILTER ───────────────────────────────────────────────────────────
+let curFilter = 'both';
+function setFilter(f) {
+  // Clicking the already-active filter toggles it back to 'both'
+  if (f !== 'both' && curFilter === f) f = 'both';
+  curFilter = f;
+  document.body.classList.remove('filter-b1','filter-b2');
+  if (f !== 'both') document.body.classList.add('filter-' + f);
+  document.querySelectorAll('.ftog-both').forEach(b => b.classList.toggle('factive', f==='both'));
+  document.querySelectorAll('.ftog-b1').forEach(b  => b.classList.toggle('factive', f==='b1'));
+  document.querySelectorAll('.ftog-b2').forEach(b  => b.classList.toggle('factive', f==='b2'));
+}
+
+function shareWA() {
   window.open(`https://wa.me/?text=${encodeURIComponent('FUSIP 2026 Timetable — check what\'s on today! ')}${encodeURIComponent(location.href)}`,'_blank');
 }
 
