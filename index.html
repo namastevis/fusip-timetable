@@ -783,7 +783,7 @@ function init(){
     const btn=document.createElement('button');
     btn.className=`pill${today?' today':''}`;
     btn.dataset.n=day.n;
-    btn.innerHTML=`<span class="pill-pre">Day ${day.n}</span><span class="pill-num">${day.wd.slice(0,3)}</span><span class="pill-date">${day.dt}</span>${today?'<span class="today-dot"></span>':''}`;
+    btn.innerHTML=`<span class="pill-pre">Day ${day.n}</span><span class="pill-num">${day.dt}</span><span class="pill-date">${day.wd.slice(0,3)}</span>${today?'<span class="today-dot"></span>':''}`;
     btn.addEventListener('click',()=>go(day.n));
     strip.appendChild(btn);
   });
