@@ -11,241 +11,115 @@
 /* ─── RESET & BASE ─────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --teal:      #1a4a5c;
-  --teal-mid:  #2a6a82;
-  --teal-lt:   #a8d5e2;
-  --parch:     #f5f0e8;
-  --parch-dk:  #e8e0d0;
-  --b1:        #4A90D9; --b1-lt: #EBF4FF; --b1-txt: #1a4a7a;
-  --b2:        #7B5EA7; --b2-lt: #F3EEFF; --b2-txt: #3d1f6e;
-  --coral:     #e07060; --coral-lt: #fae8e5;
-  --gold:      #c9a227; --gold-lt: #fdf5dc;
-  --ink:       #1a1a2e;
-  --muted:     #6b7280;
-  --white:     #ffffff;
-  --food-bg:   #FFF8EE; --food-bd: #E8A838; --food-txt: #7a4a10;
-  --free-bg:   #eff5f0; --free-bd: #8ab8a0; --free-txt: #4a7a5a;
+  --teal:      #1a4a5c; --teal-mid:  #2a6a82; --teal-lt:   #a8d5e2;
+  --parch:     #f5f0e8; --parch-dk:  #e8e0d0;
+  --b1:        #4A90D9; --b1-lt:     #EBF4FF; --b1-txt:    #1a4a7a;
+  --b2:        #7B5EA7; --b2-lt:     #F3EEFF; --b2-txt:    #3d1f6e;
+  --coral:     #e07060; --coral-lt:  #fae8e5;
+  --gold:      #c9a227; --gold-lt:   #fdf5dc;
+  --ink:       #1a1a2e; --muted:     #6b7280; --white:     #ffffff;
+  --food-bg:   #FFF8EE; --food-bd:   #E8A838; --food-txt:  #7a4a10;
+  --free-bg:   #eff5f0; --free-bd:   #8ab8a0; --free-txt:  #4a7a5a;
   --sport-bg:  #F0F4F8;
-  --well-bg:   #FFF0F3; --well-bd: #C0607A; --well-txt: #7a2040;
-  --shared-bg: #dde8ec; --shared-bd:#1a4a5c;
-  --gap:    3px;
-  --radius: 6px;
-  --font-d: 'Space Grotesk', system-ui, sans-serif;
-  --font-b: 'Inter', system-ui, sans-serif;
+  --well-bg:   #FFF0F3; --well-bd:   #C0607A; --well-txt:  #7a2040;
+  --shared-bg: #dde8ec; --shared-bd: #1a4a5c;
+  --radius: 6px; --font-d: 'Space Grotesk', system-ui, sans-serif; --font-b: 'Inter', system-ui, sans-serif;
 }
-
-html, body { height: 100%; overflow: hidden; font-size: 14px; font-family: var(--font-b); background: var(--parch); color: var(--ink); -webkit-font-smoothing: antialiased; }
+html, body { height: 100%; overflow: hidden; font-size: 14px; font-family: var(--font-b); background: var(--parch); color: var(--ink); }
 .app { width: 100%; height: 100dvh; max-width: 960px; margin: 0 auto; background: var(--white); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 0 30px rgba(0,0,0,0.08); }
-
-/* ─── HEADER ───────────────────────────────────────────────────────────────── */
 .hdr { background: var(--teal); color: var(--white); padding: 10px 14px 8px; flex-shrink: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
 .hdr-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
 .hdr-title h1 { font-family: var(--font-d); font-size: 0.88rem; font-weight: 700; line-height: 1.25; color: var(--white); }
 .hdr-title p { font-size: 0.68rem; color: var(--teal-lt); margin-top: 2px; font-weight: 500; }
-.wa-btn { flex-shrink: 0; display: flex; align-items: center; gap: 4px; background: #25d366; color: #fff; border: none; border-radius: 20px; padding: 6px 11px; font-family: var(--font-b); font-size: 0.7rem; font-weight: 600; cursor: pointer; text-decoration: none; white-space: nowrap; margin-top: 2px; }
-.wa-btn svg { width: 13px; height: 13px; }
-
-/* ─── DAY STRIP ────────────────────────────────────────────────────────────── */
-.day-strip { display: flex; gap: 5px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 1px; }
-.day-strip::-webkit-scrollbar { display: none; }
-.pill { flex-shrink: 0; scroll-snap-align: center; display: flex; flex-direction: column; align-items: center; gap: 0; background: rgba(255,255,255,0.1); border: 1.5px solid transparent; border-radius: 6px; padding: 4px 8px; cursor: pointer; min-width: 58px; text-align: center; transition: background 0.15s, border-color 0.15s; }
-.pill-pre  { font-size: 0.52rem; font-weight: 600; color: var(--teal-lt); text-transform: uppercase; letter-spacing: 0.05em; }
-.pill-num  { font-family: var(--font-d); font-size: 0.9rem; font-weight: 700; color: var(--white); line-height: 1.15; }
-.pill-date { font-size: 0.56rem; color: var(--teal-lt); font-weight: 500; }
-.pill.active { background: #ff7020; border-color: #ff7020; box-shadow: 0 2px 8px rgba(255,112,32,0.5); }
-.pill.active .pill-pre { color: #fff; font-weight: 700; }
-.pill.active .pill-num { color: #fff; font-weight: 800; text-shadow: 0 1px 2px rgba(0,0,0,0.15); }
-.pill.active .pill-date { color: #fff; font-weight: 700; }
-.pill.today { border-color: #f0b860; }
-.pill.today .pill-num { color: #f0b860; }
-.pill.today.active .pill-num { color: #fff; }
-.today-dot { width: 4px; height: 4px; border-radius: 50%; background: #f0b860; margin-top: 2px; }
-.pill.active .today-dot { background: #fff; }
-
-/* ─── DAY PANEL ────────────────────────────────────────────────────────────── */
-main { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
+.wa-btn { display: flex; align-items: center; gap: 4px; background: #25d366; color: #fff; border-radius: 20px; padding: 6px 11px; font-size: 0.7rem; font-weight: 600; text-decoration: none; }
+.day-strip { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; padding-bottom: 1px; }
+.pill { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; background: rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 8px; cursor: pointer; min-width: 58px; text-align: center; }
+.pill.active { background: #ff7020; }
 .panel { display: none; flex: 1 1 0; min-height: 0; flex-direction: column; }
 .panel.active { display: flex; }
-.panel-head { padding: 9px 14px 7px; border-bottom: 1px solid var(--parch-dk); background: linear-gradient(to bottom, #fdfcf9, #fff); flex-shrink: 0; }
-.panel-head-row { display: flex; align-items: baseline; justify-content: space-between; }
-.daylabel { font-family: var(--font-d); font-size: 1.25rem; font-weight: 700; color: var(--teal); line-height: 1; }
-.daydate  { font-size: 0.72rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
-.dayvenue { font-size: 0.68rem; color: var(--teal-mid); font-weight: 500; margin-top: 2px; }
-
-/* ─── LEGEND ───────────────────────────────────────────────────────────────── */
-.legend { display: flex; gap: 6px; align-items: center; padding: 5px 14px; background: var(--parch-dk); border-bottom: 1px solid rgba(0,0,0,0.05); flex-shrink: 0; }
-.leg-label { font-size: 0.62rem; font-weight: 600; color: var(--muted); margin-right: 2px; }
-.ftog { display: flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 600; color: #444; background: rgba(0,0,0,0.06); border: 1.5px solid transparent; border-radius: 20px; padding: 3px 9px 3px 6px; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
-.ftog .leg-sw { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
-.sw1 { background: var(--b1); } .sw2 { background: var(--b2); }
-.ftog-both { padding: 3px 10px; }
-.ftog-both.factive { background: var(--teal); color: #fff; }
-.ftog-b1.factive { background: var(--coral-lt); border-color: var(--coral); color: #8b2010; }
-.ftog-b2.factive { background: var(--gold-lt); border-color: var(--gold); color: #7a5a00; }
-body.filter-b1 [data-batch="b2"] { opacity: 0.12; filter: grayscale(1); pointer-events: none; }
-body.filter-b2 [data-batch="b1"] { opacity: 0.12; filter: grayscale(1); pointer-events: none; }
-
-/* ─── TIMELINE ─────────────────────────────────────────────────────────────── */
-.timeline { flex: 1 1 0; min-height: 0; display: flex; padding: 6px 10px 10px 0; overflow: hidden; }
+.panel-head { padding: 9px 14px 7px; border-bottom: 1px solid var(--parch-dk); background: #fff; flex-shrink: 0; }
+.timeline { flex: 1 1 0; display: flex; padding: 6px 10px 10px 0; overflow: hidden; position: relative; }
 .tl-inner { display: flex; width: 100%; height: 100%; }
-.taxis { width: 56px; flex-shrink: 0; position: relative; height: 100%; }
-.tick { position: absolute; right: 5px; font-size: 0.6rem; font-weight: 600; color: var(--muted); transform: translateY(-50%); white-space: nowrap; letter-spacing: -0.02em; text-align: right; }
-.grid { flex: 1; position: relative; height: 100%; }
-.hline { position: absolute; left: 0; right: 0; height: 1px; background: rgba(0,0,0,0.07); }
-
-/* ─── SLOT STYLING ────────────────────────────────────────────────────────── */
-.slot, .h, .asub {
-  position: absolute; left: 0; right: 0; border-radius: var(--radius); overflow: hidden; 
-  display: flex; flex-direction: column; justify-content: flex-start; padding: 3px 5px;
-  font-size: 0.68rem; box-shadow: 0 1px 2px rgba(0,0,0,0.04); min-height: 22px; z-index: 1; transition: box-shadow 0.15s;
-}
-.slot:active, .h:active, .asub:active { z-index: 25; overflow: visible; height: auto !important; box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
-.sn { font-weight: 700; line-height: 1.1; }
-.sf { font-size: 0.6rem; line-height: 1.15; margin-top: 1px; opacity: 0.85; font-weight: 500; }
-.st { font-size: 0.55rem; margin-top: auto; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; opacity: 0.7; }
-.h-inner-split { display: flex; flex-direction: row; gap: 5px; flex: 1; min-height: 0; width: 100%; }
-.h-inner-col { flex: 1 1 0%; min-width: 0; display: flex; flex-direction: column; }
-.h-div { width: 1px; background: currentColor; opacity: 0.15; flex-shrink: 0; margin: 2px 0; }
-
-.s-meal { background:var(--food-bg); border-left:3px solid var(--food-bd); flex-direction:row; align-items:center; gap:4px; }
-.s-meal .sn { color:var(--food-txt); font-size:0.75rem; }
-.s-snack { background:var(--food-bg); border-left:3px solid var(--food-bd); justify-content:center; padding:2px 5px; }
-.s-snack .sn { color:var(--food-txt); font-size:0.6rem; font-weight:600; }
-.s-shared { background:var(--shared-bg); border-left:3px solid var(--shared-bd); }
-.s-shared .sn { color:var(--teal); }
-.s-orient { background:var(--b2-lt); border-left:3px solid var(--b2); }
-.s-orient .sn { color:var(--b2-txt); }
-.hb1 { background:var(--b1-lt); border-left:3px solid var(--b1); }
-.hb2 { background:var(--b2-lt); border-left:3px solid var(--b2); }
-.hb1 .sn { color:var(--b1-txt); } .hb2 .sn { color:var(--b2-txt); }
-.nowline { position: absolute; left:-2px; right:0; pointer-events: none; z-index: 30; display: flex; align-items: center; gap: 4px; }
-.nowline::before { content:''; position:absolute; left:14px; right:0; height:2px; background:var(--coral); border-radius:1px; }
-.nowpill { background: var(--coral); color: #fff; font-size: 0.58rem; font-weight: 700; padding: 2px 5px; border-radius: 4px; z-index: 1; }
+.taxis { width: 48px; flex-shrink: 0; position: relative; height: 100%; }
+.tick { position: absolute; right: 5px; font-size: 0.6rem; font-weight: 600; color: var(--muted); letter-spacing: -0.02em; }
+.slot, .h { position: absolute; left: 0; right: 0; border-radius: var(--radius); overflow: hidden; padding: 3px 5px; font-size: 0.65rem; z-index: 1; }
+.sn { font-weight: 700; line-height: 1.1; display: block; }
+.sf { font-size: 0.55rem; opacity: 0.8; margin-top: 1px; display: block; }
+.ss { position: absolute; left: 0; right: 0; display: flex; gap: 2px; z-index: 2; }
+.h-inner-split { display: flex; gap: 2px; height: 100%; width: 100%; }
+.h-inner-col { flex: 1; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+.h-div { width: 1px; background: rgba(0,0,0,0.1); }
 </style>
 </head>
 <body>
 <div class="app">
   <header class="hdr">
     <div class="hdr-top">
-      <div class="hdr-title">
-        <h1>FLAME University Summer Immersion Program (FUSIP) 2026</h1>
-        <p>June 29 – July 08, 2026</p>
-      </div>
-      <a class="wa-btn" href="#" onclick="shareWA();return false;">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Share
-      </a>
+      <div class="hdr-title"><h1>FLAME University Summer Immersion Program (FUSIP) 2026</h1><p>June 29 – July 08, 2026</p></div>
+      <button class="wa-btn" onclick="window.open('https://wa.me/?text=Check%20out%20the%20FUSIP%202026%20timetable')">Share</button>
     </div>
     <div class="day-strip" id="strip"></div>
   </header>
   <main id="main"></main>
-  <footer class="ftr">FLAME University · FUSIP 2026 · All times IST</footer>
+  <footer class="ftr" style="padding:10px; font-size:0.65rem; background:var(--parch)">FLAME University · FUSIP 2026</footer>
 </div>
+
 <script>
-// Data structure updated for Day 8
 const S = {
-  b1: "Batch 1 (CHK 001)",
-  b2: "Batch 2 (CHK 101)",
+  b1: "Batch 1", b2: "Batch 2",
   days: [
-    /* Days 1-7 remain the same... */
-    {n:1, wd:"Monday", dt:"29 June", venue:null, ticks:["7am","8am","9am","12pm","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"], slots:[{t:"meal",s:"08:00",e:"09:00",label:"Breakfast"},{t:"shared",s:"09:00",e:"12:00",label:"Arrival, Registration & Room Allocation"},{t:"shared",s:"12:00",e:"13:30",label:"Welcome & Orientation"},{t:"meal",s:"13:30",e:"14:30",label:"Lunch"},{t:"free",s:"14:30",e:"16:30",label:"Free Time"},{t:"snack",s:"16:30",e:"17:00",label:"Evening Snack"},{t:"shared",s:"17:00",e:"18:00",label:"Campus Tour"},{t:"shared",s:"18:00",e:"19:00",label:"Ice Breakers",fac:"Kalidas"},{t:"free",s:"19:00",e:"20:00",label:"Free Time"},{t:"meal",s:"20:00",e:"21:00",label:"Dinner"}]},
-    {n:2, wd:"Tuesday", dt:"30 June", venue:null, ticks:["7am","8am","9am","10am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"], slots:[{t:"meal",s:"08:00",e:"09:00",label:"Breakfast"},{t:"asym",s:"09:00",e:"11:00",tall:{side:"b1",label:"CaseLab: Comic Cases",fac:"Neha Yadav"},stack:[{s:"09:00",e:"10:00",label:"Gen Z to Zen Z",fac:"Moitrayee Das",cls:"b2"},{s:"10:00",e:"11:00",label:"Outreach",fac:"Anju Deoskar",cls:"b2"}]},{t:"snack",s:"11:00",e:"11:30",label:"Snacks"},{t:"split",s:"11:30",e:"13:30",b1:{label:"Hit the Road",fac:"Jaslene Bawa"},b2:{label:"CaseLab: Comic Cases",fac:"Neha Yadav"}},{t:"meal",s:"13:30",e:"14:30",label:"Lunch"},{t:"split",s:"14:30",e:"16:30",b1:{label:"Marketing Essentials",fac:"Aakash Kamble"},b2:{label:"Hit the Road",fac:"Jaslene Bawa"}},{t:"snack",s:"16:30",e:"17:00",label:"Evening Snack"},{t:"free",s:"17:00",e:"18:00",label:"Free Time"},{t:"sport",s:"18:00",e:"19:00",label:"Zumba",fac:"Arjuna"},{t:"free",s:"19:00",e:"20:00",label:"Free Time"},{t:"meal",s:"20:00",e:"21:00",label:"Dinner"}]},
-    {n:3, wd:"Wednesday", dt:"1 July", venue:null, ticks:["7am","8am","9am","12pm","4:30pm","5pm","8pm","9pm"], slots:[{t:"split",s:"07:00",e:"08:00",b1:{cls:"empty"},b2:{label:"Early Breakfast",fac:"Before departure",cls:"b2"}},{t:"split",s:"08:00",e:"09:00",b1:{label:"Departs for Garud Machi",cls:"trip"},b2:{label:"Orientation",fac:"Shivakumar Jolad",cls:"orient"}},{t:"asym",s:"09:00",e:"20:00",tall:{side:"b1",label:"Garud Machi Camp",fac:"Garud Machi",cls:"trip"},stack:[{s:"09:00",e:"16:30",label:"Rural Immersion",fac:"Field trip",cls:"trip"},{s:"16:30",e:"17:00",label:"Evening Snack",cls:"snack"},{s:"17:00",e:"20:00",label:"Free Time",cls:"free"}]},{t:"meal",s:"20:00",e:"21:00",label:"Dinner"}]},
-    {n:4, wd:"Thursday", dt:"2 July", venue:null, ticks:["7am","8am","9am","10am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"], slots:[{t:"meal",s:"08:00",e:"09:00",label:"Breakfast"},{t:"asym",s:"09:00",e:"11:00",tall:{side:"b2",label:"Marketing Essentials",fac:"Aakash Kamble"},stack:[{s:"09:00",e:"10:00",label:"Outreach",fac:"Anju Deoskar",cls:"b1"},{s:"10:00",e:"11:00",label:"Gen Z to Zen Z",fac:"Moitrayee Das",cls:"b1"}]},{t:"snack",s:"11:00",e:"11:30",label:"Snacks"},{t:"split",s:"11:30",e:"13:30",b1:{label:"Entrepreneurs Are Made",fac:"Vishal Shah"},b2:{label:"Colours in Nature",fac:"Atul Joshi"}},{t:"meal",s:"13:30",e:"14:30",label:"Lunch"},{t:"split",s:"14:30",e:"16:30",b1:{label:"Game Theory",fac:"Arun Kaushik"},b2:{label:"Applied AI Sandbox",fac:"Sorabh Bajaj"}},{t:"snack",s:"16:30",e:"17:00",label:"Evening Snack"},{t:"well",s:"17:00",e:"18:00",label:"Wellness 1",fac:"Suniti Vadalkar"},{t:"split",s:"18:00",e:"19:00",b1:{label:"Basketball",cls:"sport"},b2:{label:"Pickleball",cls:"sport"}},{t:"split",s:"19:00",e:"20:00",b1:{label:"Basketball",cls:"sport"},b2:{label:"Pickleball",cls:"sport"}},{t:"meal",s:"20:00",e:"21:00",label:"Dinner"}]},
-    {n:5, wd:"Friday", dt:"3 July", venue:null, ticks:["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"], slots:[{t:"meal",s:"08:00",e:"09:00",label:"Breakfast"},{t:"split",s:"09:00",e:"11:00",b1:{label:"Film Appreciation",fac:"Ramna Walia"},b2:{label:"Neurodiversity Lens",fac:"Abha Basargekar"}},{t:"snack",s:"11:00",e:"11:30",label:"Snacks"},{t:"split",s:"11:30",e:"13:30",b1:{label:"Colours in Nature",fac:"Atul Joshi"},b2:{label:"Entrepreneurs Are Made",fac:"Vishal Shah"}},{t:"meal",s:"13:30",e:"14:30",label:"Lunch"},{t:"split",s:"14:30",e:"16:30",b1:{label:"Writing as Thinking",fac:"Labanya Unni"},b2:{label:"Film Appreciation",fac:"Ramna Walia"}},{t:"snack",s:"16:30",e:"17:00",label:"Evening Snack"},{t:"free",s:"17:00",e:"18:00",label:"Free Time"},{t:"split",s:"18:00",e:"19:00",b1:{label:"Pickleball",cls:"sport"},b2:{label:"Basketball",cls:"sport"}},{t:"split",s:"19:00",e:"20:00",b1:{label:"Pickleball",cls:"sport"},b2:{label:"Basketball",cls:"sport"}},{t:"meal",s:"20:00",e:"21:00",label:"Dinner"}]},
-    {n:6, wd:"Saturday", dt:"4 July", venue:null, ticks:["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"], slots:[{t:"meal",s:"08:00",e:"09:00",label:"Breakfast"},{t:"split",s:"09:00",e:"11:00",b1:{label:"Neurodiversity Lens",fac:"Abha Basargekar"},b2:{label:"Intro to Game Theory",fac:"Arun Kaushik"}},{t:"snack",s:"11:00",e:"11:30",label:"Snacks & Frames AMA"},{t:"split",s:"11:30",e:"13:30",b1:{label:"VR & AR",fac:"Rahul Ray"},b2:{label:"Climate Solutions",fac:"Anjal Prakash"}},{t:"meal",s:"13:30",e:"14:30",label:"Lunch"},{t:"split",s:"14:30",e:"16:30",b1:{label:"Climate Solutions",fac:"Anjal Prakash"},b2:{label:"VR & AR",fac:"Rahul Ray"}},{t:"snack",s:"16:30",e:"17:00",label:"Evening Snack"},{t:"well",s:"17:00",e:"18:00",label:"Wellness 2",fac:"Suniti Vadalkar"},{t:"split",s:"18:00",e:"19:00",b1:{label:"Futsal",cls:"sport"},b2:{label:"Badminton",cls:"sport"}},{t:"split",s:"19:00",e:"20:00",b1:{label:"Futsal",cls:"sport"},b2:{label:"Badminton",cls:"sport"}},{t:"meal",s:"20:00",e:"21:00",label:"Dinner"}]},
-    {n:7, wd:"Sunday", dt:"5 July", venue:null, ticks:["7am","8am","9am","12pm","4:30pm","5pm","8pm","9pm"], slots:[{t:"split",s:"07:00",e:"08:00",b1:{label:"Early Breakfast",cls:"b1"},b2:{cls:"empty"}},{t:"split",s:"08:00",e:"09:00",b1:{label:"Orientation",fac:"Shivakumar Jolad",cls:"orient"},b2:{label:"Departs for Garud Machi",cls:"trip"}},{t:"asym",s:"09:00",e:"20:00",tall:{side:"b2",label:"Garud Machi Camp",fac:"Garud Machi",cls:"trip"},stack:[{s:"09:00",e:"16:30",label:"Rural Immersion",fac:"Field trip",cls:"trip"},{s:"16:30",e:"17:00",label:"Evening Snack",cls:"snack"},{s:"17:00",e:"20:00",label:"Free Time",cls:"free"}]},{t:"meal",s:"20:00",e:"21:00",label:"Dinner"}]},
-    
-    // Day 8 updated with sub-splits
-    {
-      n:8, wd:"Monday", dt:"6 July", venue:null,
-      ticks:["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
-      slots:[
-        {t:"meal",s:"08:00",e:"09:00",label:"Breakfast"},
-        {t:"split",s:"09:00",e:"11:00",
-          b1:{label:"Consciousness and God",fac:"Michael Hatcher"},
-          b2:{label:"Writing as a Form of Thinking",fac:"Labanya Unni"}},
-        {t:"snack",s:"11:00",e:"11:30",label:"Snacks & Frames AMA"},
-        
-        {t:"split",s:"11:30",e:"13:30",
-          b1: [
-            {label:"Learning by Doing", fac:"Pathik Desai<br>📍 APJ Design Lab"},
-            {label:"Idea Visualization", fac:"Shamit Shrivastav<br>📍 APJ 104"}
-          ],
-          b2:{label:"Design Thinking Storytelling",fac:"Sherline Pimenta"}},
-          
-        {t:"meal",s:"13:30",e:"14:30",label:"Lunch"},
-        
-        {t:"split",s:"14:30",e:"16:30",
-          b1:{label:"Design Thinking Storytelling",fac:"Sherline Pimenta"},
-          b2: [
-            {label:"Learning by Doing", fac:"Pathik Desai<br>📍 APJ Design Lab"},
-            {label:"Idea Visualization", fac:"Shamit Shrivastav<br>📍 APJ 104"}
-          ]},
-        {t:"snack",s:"16:30",e:"17:00",label:"Evening Snack"},
-        {t:"free", s:"17:00",e:"18:00",label:"Free Time"},
-        {t:"split",s:"18:00",e:"19:00",b1:{label:"Badminton",cls:"sport"},b2:{label:"Futsal",cls:"sport"}},
-        {t:"split",s:"19:00",e:"20:00",b1:{label:"Badminton",cls:"sport"},b2:{label:"Futsal",cls:"sport"}},
-        {t:"meal",s:"20:00",e:"21:00",label:"Dinner"},
-      ]
-    },
-    {n:9, wd:"Tuesday", dt:"7 July", venue:null, ticks:["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","8pm","9pm"], slots:[{t:"meal",s:"08:00",e:"09:00",label:"Breakfast"},{t:"split",s:"09:00",e:"11:00",b1:{label:"Applied AI Sandbox",fac:"Sorabh Bajaj"},b2:{label:"Consciousness and God",fac:"Michael Hatcher"}},{t:"snack",s:"11:00",e:"11:30",label:"Snacks"},{t:"split",s:"11:30",e:"13:30",b1:{label:"Technology & Society",fac:"M. Chaudhuri"},b2:{label:"Reading Literature",fac:"Tarinee Awasthi"}},{t:"meal",s:"13:30",e:"14:30",label:"Lunch"},{t:"split",s:"14:30",e:"16:30",b1:{label:"Reading Literature",fac:"Tarinee Awasthi"},b2:{label:"Technology & Society",fac:"M. Chaudhuri"}},{t:"snack",s:"16:30",e:"17:00",label:"Evening Snack"},{t:"well",s:"17:00",e:"18:00",label:"Wellness 3",fac:"Suniti Vadalkar"},{t:"free",s:"18:00",e:"20:00",label:"Free Time"},{t:"meal",s:"20:00",e:"21:00",label:"Dinner"}]},
-    {n:10, wd:"Wednesday", dt:"8 July", venue:null, ticks:["7am","8am","9am","12:30pm","1:30pm"], slots:[{t:"shared",s:"07:00",e:"08:00",label:"Room Keys Handover"},{t:"meal",s:"08:00",e:"09:00",label:"Breakfast"},{t:"shared",s:"09:00",e:"12:30",label:"Presentations",sub:"16 groups · 3 min video + 7 min presentation each"},{t:"snack",s:"12:30",e:"13:30",label:"Snacks & Certificates"},{t:"end",s:"13:30",e:"14:00",label:"Program ends"}]},
+    { n:1, wd:"Monday", dt:"29 June", slots:[{s:"08:00",e:"09:00",l:"Breakfast",t:"meal"},{s:"09:00",e:"12:00",l:"Registration",t:"shared"},{s:"12:00",e:"13:30",l:"Welcome & Orientation",t:"shared"},{s:"13:30",e:"14:30",l:"Lunch",t:"meal"},{s:"14:30",e:"16:30",l:"Free Time",t:"free"},{s:"16:30",e:"17:00",l:"Evening Snack",t:"snack"},{s:"17:00",e:"18:00",l:"Campus Tour",t:"shared"},{s:"18:00",e:"19:00",l:"Ice Breakers",fac:"Kalidas",t:"shared"},{s:"19:00",e:"20:00",l:"Free Time",t:"free"},{s:"20:00",e:"21:00",l:"Dinner",t:"meal"}]},
+    { n:2, wd:"Tuesday", dt:"30 June", slots:[{s:"08:00",e:"09:00",l:"Breakfast",t:"meal"},{s:"09:00",e:"11:00",t:"split",b1:{l:"CaseLab",f:"Neha Yadav"},b2:{l:"Gen Z to Zen Z",f:"Moitrayee Das"}},{s:"11:00",e:"11:30",l:"Snacks",t:"snack"},{s:"11:30",e:"13:30",t:"split",b1:{l:"Hit the Road",f:"Jaslene Bawa"},b2:{l:"CaseLab",f:"Neha Yadav"}},{s:"13:30",e:"14:30",l:"Lunch",t:"meal"},{s:"14:30",e:"16:30",t:"split",b1:{l:"Marketing Essentials",f:"Aakash Kamble"},b2:{l:"Hit the Road",f:"Jaslene Bawa"}},{s:"16:30",e:"17:00",l:"Snack",t:"snack"},{s:"17:00",e:"18:00",l:"Free Time",t:"free"},{s:"18:00",e:"19:00",l:"Zumba",f:"Arjuna",t:"sport"},{s:"19:00",e:"20:00",l:"Free Time",t:"free"},{s:"20:00",e:"21:00",l:"Dinner",t:"meal"}]},
+    { n:3, wd:"Wednesday", dt:"1 July", slots:[{s:"07:00",e:"08:00",l:"Early Breakfast",t:"meal"},{s:"08:00",e:"09:00",l:"Orientation",t:"shared"},{s:"09:00",e:"16:30",l:"Rural Immersion",t:"trip"},{s:"16:30",e:"17:00",l:"Snack",t:"snack"},{s:"17:00",e:"20:00",l:"Free Time",t:"free"},{s:"20:00",e:"21:00",l:"Dinner",t:"meal"}]},
+    { n:4, wd:"Thursday", dt:"2 July", slots:[{s:"08:00",e:"09:00",l:"Breakfast",t:"meal"},{s:"09:00",e:"11:00",t:"split",b1:{l:"Outreach",f:"Anju Deoskar"},b2:{l:"Marketing Essentials",f:"Aakash Kamble"}},{s:"11:00",e:"11:30",l:"Snacks",t:"snack"},{s:"11:30",e:"13:30",t:"split",b1:{l:"Entrepreneurship",f:"Vishal Shah"},b2:{l:"Colours in Nature",f:"Atul Joshi"}},{s:"13:30",e:"14:30",l:"Lunch",t:"meal"},{s:"14:30",e:"16:30",t:"split",b1:{l:"Game Theory",f:"Arun Kaushik"},b2:{l:"Applied AI Sandbox",f:"Sorabh Bajaj"}},{s:"16:30",e:"17:00",l:"Snack",t:"snack"},{s:"17:00",e:"18:00",l:"Wellness",f:"Suniti Vadalkar",t:"well"},{s:"18:00",e:"20:00",l:"Sports",t:"sport"},{s:"20:00",e:"21:00",l:"Dinner",t:"meal"}]},
+    { n:5, wd:"Friday", dt:"3 July", slots:[{s:"08:00",e:"09:00",l:"Breakfast",t:"meal"},{s:"09:00",e:"11:00",t:"split",b1:{l:"Film Appreciation",f:"Ramna Walia"},b2:{l:"Neurodiversity",f:"Abha Basargekar"}},{s:"11:00",e:"11:30",l:"Snacks",t:"snack"},{s:"11:30",e:"13:30",t:"split",b1:{l:"Colours in Nature",f:"Atul Joshi"},b2:{l:"Entrepreneurship",f:"Vishal Shah"}},{s:"13:30",e:"14:30",l:"Lunch",t:"meal"},{s:"14:30",e:"16:30",t:"split",b1:{l:"Writing Thinking",f:"Labanya Unni"},b2:{l:"Film Appreciation",f:"Ramna Walia"}},{s:"16:30",e:"17:00",l:"Snack",t:"snack"},{s:"17:00",e:"18:00",l:"Free",t:"free"},{s:"18:00",e:"20:00",l:"Sports",t:"sport"},{s:"20:00",e:"21:00",l:"Dinner",t:"meal"}]},
+    { n:6, wd:"Saturday", dt:"4 July", slots:[{s:"08:00",e:"09:00",l:"Breakfast",t:"meal"},{s:"09:00",e:"11:00",t:"split",b1:{l:"Neurodiversity",f:"Abha Basargekar"},b2:{l:"Game Theory",f:"Arun Kaushik"}},{s:"11:00",e:"11:30",l:"Snacks",t:"snack"},{s:"11:30",e:"13:30",t:"split",b1:{l:"VR & AR",f:"Rahul Ray"},b2:{l:"Climate Solutions",f:"Anjal Prakash"}},{s:"13:30",e:"14:30",l:"Lunch",t:"meal"},{s:"14:30",e:"16:30",t:"split",b1:{l:"Climate Solutions",f:"Anjal Prakash"},b2:{l:"VR & AR",f:"Rahul Ray"}},{s:"16:30",e:"17:00",l:"Snack",t:"snack"},{s:"17:00",e:"18:00",l:"Wellness",f:"Suniti Vadalkar",t:"well"},{s:"18:00",e:"20:00",l:"Sports",t:"sport"},{s:"20:00",e:"21:00",l:"Dinner",t:"meal"}]},
+    { n:7, wd:"Sunday", dt:"5 July", slots:[{s:"07:00",e:"08:00",l:"Breakfast",t:"meal"},{s:"08:00",e:"09:00",l:"Orientation",t:"shared"},{s:"09:00",e:"16:30",l:"Rural Immersion",t:"trip"},{s:"16:30",e:"17:00",l:"Snack",t:"snack"},{s:"17:00",e:"20:00",l:"Free Time",t:"free"},{s:"20:00",e:"21:00",l:"Dinner",t:"meal"}]},
+    { n:8, wd:"Monday", dt:"6 July", slots:[{s:"08:00",e:"09:00",l:"Breakfast",t:"meal"},{s:"09:00",e:"11:00",t:"split",b1:{l:"Consciousness & God",f:"M. Hatcher"},b2:{l:"Writing Thinking",f:"L. Unni"}},{s:"11:00",e:"11:30",l:"Snacks",t:"snack"},{s:"11:30",e:"13:30",t:"split",b1:[{label:"Learning by Doing",fac:"📍APJ Design Lab<br>Pathik Desai"},{label:"Idea Visualization",fac:"📍APJ 104<br>Shamit Shrivastav"}],b2:{label:"Design Thinking",fac:"Sherline Pimenta"}},{s:"13:30",e:"14:30",l:"Lunch",t:"meal"},{s:"14:30",e:"16:30",t:"split",b1:{label:"Design Thinking",fac:"Sherline Pimenta"},b2:[{label:"Learning by Doing",fac:"📍APJ Design Lab<br>Pathik Desai"},{label:"Idea Visualization",fac:"📍APJ 104<br>Shamit Shrivastav"}]},{s:"16:30",e:"17:00",l:"Snack",t:"snack"},{s:"17:00",e:"18:00",l:"Free",t:"free"},{s:"18:00",e:"20:00",l:"Sports",t:"sport"},{s:"20:00",e:"21:00",l:"Dinner",t:"meal"}]},
+    { n:9, wd:"Tuesday", dt:"7 July", slots:[{s:"08:00",e:"09:00",l:"Breakfast",t:"meal"},{s:"09:00",e:"11:00",t:"split",b1:{l:"Applied AI",f:"Sorabh Bajaj"},b2:{l:"Consciousness & God",f:"M. Hatcher"}},{s:"11:00",e:"11:30",l:"Snacks",t:"snack"},{s:"11:30",e:"13:30",t:"split",b1:{l:"Tech & Society",f:"M. Chaudhuri"},b2:{l:"Literature",f:"Tarinee Awasthi"}},{s:"13:30",e:"14:30",l:"Lunch",t:"meal"},{s:"14:30",e:"16:30",t:"split",b1:{l:"Literature",f:"Tarinee Awasthi"},b2:{l:"Tech & Society",f:"M. Chaudhuri"}},{s:"16:30",e:"17:00",l:"Snack",t:"snack"},{s:"17:00",e:"18:00",l:"Wellness",f:"Suniti Vadalkar",t:"well"},{s:"18:00",e:"20:00",l:"Free Time",t:"free"},{s:"20:00",e:"21:00",l:"Dinner",t:"meal"}]},
+    { n:10, wd:"Wednesday", dt:"8 July", slots:[{s:"07:00",e:"08:00",l:"Room Keys"},{s:"08:00",e:"09:00",l:"Breakfast",t:"meal"},{s:"09:00",e:"12:30",l:"Presentations",fac:"📍 Shantiniketan"},{s:"12:30",e:"13:30",l:"Certificates & Snacks",t:"snack"},{s:"13:30",e:"14:00",l:"Program ends",t:"end"}]}
   ]
 };
 
-// ─── RENDERING ENGINE ───
 const DS = 7*60, DE = 21*60, SPAN = DE-DS;
 const tm = hhmm => { const [h,m]=hhmm.split(':').map(Number); return h*60+m; };
-const pct = m => ((m-DS)/SPAN*100).toFixed(3);
-function tickMins(label) {
-  const pm = label.includes('pm'); const [tp] = label.split(/(am|pm)/); const [h,m='0'] = tp.split(':');
-  let hr = parseInt(h); if (pm && hr!==12) hr+=12; if (!pm && hr===12) hr=0; return hr*60+parseInt(m);
-}
-const CLS = {meal:'s-meal',snack:'s-snack',free:'s-free',shared:'s-shared',orient:'s-orient',trip:'s-trip',sport:'s-sport',well:'s-well',end:'s-end'};
-const HCLS = {b1:'hb1',b2:'hb2',trip:'h-trip',orient:'h-orient',snack:'h-snack',free:'h-free',sport:'h-sport',empty:'h-empty'};
-function pos(s,e) { return `top:calc(${pct(tm(s))}% + 1px);height:calc(${pct(tm(e))-pct(tm(s))}% - 2px);`; }
+const pct = m => ((m-DS)/SPAN*100).toFixed(2);
+const pos = (s,e) => `top:calc(${pct(tm(s))}% + 1px);height:calc(${pct(tm(e))-pct(tm(s))}% - 2px);`;
 
 function renderSlot(sl) {
-  const p = pos(sl.s||sl.start, sl.e||sl.end);
-  if (sl.t==='meal') return `<div class="slot s-meal" style="${p}"><span class="mi">${sl.icon||'🍽'}</span><span class="sn">${sl.label}</span></div>`;
-  if (['snack','free','shared','orient','trip','sport','well','end'].includes(sl.t))
-    return `<div class="slot ${CLS[sl.t]}" style="${p}"><span class="sn">${sl.label}</span>${sl.fac?`<span class="sf">${sl.fac}</span>`:''}${sl.sub?`<span class="sf">${sl.sub}</span>`:''}</div>`;
+  const p = pos(sl.s, sl.e);
+  if (sl.t==='meal') return `<div class="slot s-meal" style="${p}"><span class="sn">${sl.l}</span></div>`;
+  if (sl.t==='snack') return `<div class="slot s-snack" style="${p}"><span class="sn">${sl.l}</span></div>`;
   if (sl.t==='split') {
-    const hh = (h, def) => {
+    const hh = (h) => {
       if (Array.isArray(h)) {
-        const c = HCLS[def] || 'hb1';
-        const inner = h.map(sub => `<div class="h-inner-col"><span class="sn">${sub.label}</span>${sub.fac ? `<span class="sf">${sub.fac}</span>` : ''}</div>`).join('<div class="h-div"></div>');
-        return `<div class="h ${c}" data-batch="${def}"><div class="h-inner-split">${inner}</div></div>`;
+        const inner = h.map(sub => `<div class="h-inner-col"><span class="sn">${sub.label}</span><span class="sf">${sub.fac}</span></div>`).join('<div class="h-div"></div>');
+        return `<div class="h hb1"><div class="h-inner-split">${inner}</div></div>`;
       }
-      if (!h || (!h.label && h.cls === 'empty')) return `<div class="h h-empty" data-batch="${def}"></div>`;
-      const c = HCLS[h.cls || def] || 'hb1';
-      return `<div class="h ${c}" data-batch="${def}">${h.label?`<span class="sn">${h.label}</span>`:''}${h.fac?`<span class="sf">${h.fac}</span>`:''}</div>`;
+      return `<div class="h hb1"><span class="sn">${h.l||h.label}</span><span class="sf">${h.f||''}</span></div>`;
     };
-    return `<div class="ss" style="${p}">${hh(sl.b1,'b1')}${hh(sl.b2,'b2')}</div>`;
+    return `<div class="ss" style="${p}">${hh(sl.b1)}${hh(sl.b2)}</div>`;
   }
-  return '';
+  return `<div class="slot" style="${p}"><span class="sn">${sl.l}</span>${sl.f?`<span class="sf">${sl.f}</span>`:''}</div>`;
 }
 
-function renderDay(day) {
-  const tms = day.ticks.map(tickMins);
-  const ticks = tms.map((m,i)=>`<div class="tick" style="top:${pct(m)}%;">${day.ticks[i]}</div>`).join('');
-  const hlines = Array.from({length:15},(_,i)=>(i+7)*60).filter(m=>m<=DE).map(m=>`<div class="hline" style="top:${pct(m)}%;"></div>`).join('');
-  const slots = day.slots.map(renderSlot).join('');
-  return `<div class="panel" id="d${day.n}" data-n="${day.n}"><div class="panel-head"><div class="panel-head-row"><span class="daylabel">Day ${day.n}</span><span class="daydate">${day.wd} · ${day.dt}</span></div>${day.venue?`<div class="dayvenue">${day.venue}</div>`:''}</div><div class="legend"><span class="leg-label">View:</span><button class="ftog ftog-both factive" onclick="setFilter('both')">Both</button><button class="ftog ftog-b1" onclick="setFilter('b1')"><span class="leg-sw sw1"></span>${S.b1}</button><button class="ftog ftog-b2" onclick="setFilter('b2')"><span class="leg-sw sw2"></span>${S.b2}</button></div><div class="timeline"><div class="tl-inner"><div class="taxis">${ticks}</div><div class="grid">${hlines}${slots}</div></div></div></div>`;
+function renderDay(d) {
+  const slots = d.slots.map(renderSlot).join('');
+  return `<div class="panel" id="d${d.n}" data-n="${d.n}"><div class="panel-head"><div class="panel-head-row"><span class="daylabel">Day ${d.n}</span><span class="daydate">${d.wd} · ${d.dt}</span></div></div><div class="timeline"><div class="tl-inner"><div class="taxis"></div><div class="grid">${slots}</div></div></div></div>`;
 }
 
-function todayNum(){ const d=Math.floor((new Date()-PROG)/(864e5)); return (d>=0&&d<10)?d+1:null; }
-let cur=1; function go(n,scroll=true){ cur=n; document.querySelectorAll('.pill').forEach(p=>p.classList.toggle('active',+p.dataset.n===n)); document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',+p.dataset.n===n)); if(scroll){const el=document.querySelector(`.pill[data-n="${n}"]`);if(el)el.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});} }
-
-function init(){
-  const strip=document.getElementById('strip'), main=document.getElementById('main');
-  S.days.forEach(day=>{ const btn=document.createElement('button'); btn.className=`pill${todayNum()===day.n?' today':''}`; btn.dataset.n=day.n; btn.innerHTML=`<span class="pill-pre">Day ${day.n}</span><span class="pill-num">${day.dt}</span><span class="pill-date">${day.wd.slice(0,3)}</span>`; btn.addEventListener('click',()=>go(day.n)); strip.appendChild(btn); });
-  main.innerHTML=S.days.map(renderDay).join(''); go(todayNum()||1,true);
+function init() {
+  const strip = document.getElementById('strip'), main = document.getElementById('main');
+  S.days.forEach(d => {
+    const btn = document.createElement('button');
+    btn.className = 'pill'; btn.innerHTML = `<span class="pill-pre">Day ${d.n}</span><span class="pill-num">${d.dt.split(' ')[0]}</span><span class="pill-date">${d.wd.slice(0,3)}</span>`;
+    btn.onclick = () => { document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); document.getElementById('d'+d.n).classList.add('active'); };
+    strip.appendChild(btn);
+  });
+  main.innerHTML = S.days.map(renderDay).join('');
+  document.querySelector('.pill').click();
 }
-function setFilter(f){ if(f!=='both'&&curFilter===f)f='both'; curFilter=f; document.body.classList.remove('filter-b1','filter-b2'); if(f!=='both')document.body.classList.add('filter-'+f); document.querySelectorAll('.ftog-both').forEach(b=>b.classList.toggle('factive',f==='both')); document.querySelectorAll('.ftog-b1').forEach(b=>b.classList.toggle('factive',f==='b1')); document.querySelectorAll('.ftog-b2').forEach(b=>b.classList.toggle('factive',f==='b2')); }
-function shareWA(){ window.open(`https://wa.me/?text=${encodeURIComponent('FUSIP 2026 Timetable — ')}${encodeURIComponent(location.href)}`,'_blank'); }
-document.addEventListener('DOMContentLoaded',init);
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
