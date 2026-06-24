@@ -12,477 +12,345 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --teal:      #1a4a5c;
-  --teal-mid: #2a6a82;
-  --teal-lt:  #a8d5e2;
-  --parch:    #f5f0e8;
-  --parch-dk: #e8e0d0;
-  --coral:    #e07060;
-  --coral-lt: #fae8e5;
-  --gold:     #c9a227;
-  --gold-lt:  #fdf5dc;
-  --ink:      #1a1a2e;
-  --muted:    #6b7280;
-  --white:    #ffffff;
-  
-  /* Thematic Slot Colors */
-  --snack-bg: #fef4e3; --snack-bd: #e0a030;
-  --meal-bg:  #fff8ee; --meal-bd:  #f0b860;
-  --free-bg:  #eff5f0; --free-bd:  #8ab8a0;
-  --orient-bg:#e8f4ec; --orient-bd:#40a060;
-  --trip-bg:  #fff0e0; --trip-bd:  #e08030;
-  --sport-bg: #eef3fb; --sport-bd: #5080c0;
-  --well-bg:  #f0eef8; --well-bd:  #8070c0;
-  --shared-bg:#dde8ec; --shared-bd:#1a4a5c;
-  
-  --gap: 3px;
+  --teal-mid:  #2a6a82;
+  --teal-lt:   #a8d5e2;
+  --parch:     #f5f0e8;
+  --parch-dk:  #e8e0d0;
+  --coral:     #e07060;
+  --coral-lt:  #fae8e5;
+  --gold:      #c9a227;
+  --gold-lt:   #fdf5dc;
+  --ink:       #1a1a2e;
+  --muted:     #6b7280;
+  --white:     #ffffff;
+  --snack-bg:  #fef4e3; --snack-bd: #e0a030;
+  --meal-bg:   #fff8ee; --meal-bd:  #f0b860;
+  --free-bg:   #eff5f0; --free-bd:  #8ab8a0;
+  --orient-bg: #e8f4ec; --orient-bd:#40a060;
+  --trip-bg:   #fff0e0; --trip-bd:  #e08030;
+  --sport-bg:  #eef3fb; --sport-bd: #5080c0;
+  --well-bg:   #f0eef8; --well-bd:  #8070c0;
+  --shared-bg: #dde8ec; --shared-bd:#1a4a5c;
+  --gap:    3px;
   --radius: 6px;
   --font-d: 'Space Grotesk', system-ui, sans-serif;
   --font-b: 'Inter', system-ui, sans-serif;
 }
 
+/* ─── LOCK TO VIEWPORT, NO BODY SCROLL ─────────────────────────────────────── */
 html, body {
   height: 100%;
-  overflow: hidden; /* STRICTLY removes global vertical scroll */
+  overflow: hidden;
   font-size: 14px;
-}
-
-body {
   font-family: var(--font-b);
   background: var(--parch);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
-  display: flex;
-  flex-direction: column;
 }
 
-/* ─── APP WRAPPER (100% HEIGHT CONTAINMENT) ───────────────────────────────── */
-.app-container {
+.app {
   width: 100%;
-  max-width: 1200px;
+  height: 100dvh;
+  max-width: 960px;
   margin: 0 auto;
   background: var(--white);
-  height: 100dvh;
-  max-height: 100dvh;
-  box-shadow: 0 0 20px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-shadow: 0 0 30px rgba(0,0,0,0.08);
 }
 
-/* ─── HEADER (COMPACTED FOR MOBILE) ────────────────────────────────────────── */
-.site-header {
+/* ─── HEADER ───────────────────────────────────────────────────────────────── */
+.hdr {
   background: var(--teal);
   color: var(--white);
   padding: 10px 14px 8px;
-  position: relative;
-  z-index: 100;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
   flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
 }
-.header-top {
+.hdr-top {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 10px;
   margin-bottom: 8px;
-  gap: 8px;
 }
-.header-title h1 {
+.hdr-title h1 {
   font-family: var(--font-d);
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--white);
 }
-.header-title p {
-  font-size: 0.7rem;
+.hdr-title p {
+  font-size: 0.68rem;
   color: var(--teal-lt);
-  margin-top: 1px;
+  margin-top: 2px;
   font-weight: 500;
 }
-.whatsapp-btn {
+.wa-btn {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 4px;
   background: #25d366;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 20px;
-  padding: 5px 10px;
+  padding: 6px 11px;
   font-family: var(--font-b);
   font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
-  transition: transform 0.2s;
+  margin-top: 2px;
 }
-.whatsapp-btn:hover { transform: scale(1.03); }
-.whatsapp-btn svg { width: 13px; height: 13px; }
+.wa-btn svg { width: 13px; height: 13px; }
 
-/* ─── DAY SELECTOR (SMALLER PILLS TO SAVE SPACE) ───────────────────────────── */
+/* ─── DAY STRIP ────────────────────────────────────────────────────────────── */
 .day-strip {
   display: flex;
-  gap: 6px;
+  gap: 5px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding-bottom: 2px;
+  padding-bottom: 1px;
 }
 .day-strip::-webkit-scrollbar { display: none; }
-.day-pill {
+
+.pill {
   flex-shrink: 0;
   scroll-snap-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1px;
-  background: rgba(255,255,255,0.08);
+  gap: 0;
+  background: rgba(255,255,255,0.1);
   border: 1.5px solid transparent;
   border-radius: 6px;
-  padding: 4px 6px;
+  padding: 4px 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 62px;
+  min-width: 58px;
   text-align: center;
+  transition: background 0.15s, border-color 0.15s;
 }
-.day-pill .pill-prefix {
-  font-size: 0.55rem;
-  font-weight: 600;
-  color: var(--teal-lt);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  opacity: 0.8;
-}
-.day-pill .pill-num {
-  font-family: var(--font-d);
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--white);
-  line-height: 1.1;
-}
-.day-pill .pill-date {
-  font-size: 0.6rem;
-  font-weight: 500;
-  color: var(--teal-lt);
-}
-.day-pill.active {
-  background: var(--white);
-  border-color: var(--white);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-.day-pill.active .pill-prefix { color: var(--teal-mid); }
-.day-pill.active .pill-num { color: var(--teal); }
-.day-pill.active .pill-date { color: var(--ink); font-weight: 600; }
-.day-pill.today-pill { border-color: #f0b860; }
-.day-pill.today-pill .pill-num { color: #f0b860; }
-.day-pill.today-pill.active .pill-num { color: var(--teal); }
+.pill-pre  { font-size: 0.52rem; font-weight: 600; color: var(--teal-lt); text-transform: uppercase; letter-spacing: 0.05em; }
+.pill-num  { font-family: var(--font-d); font-size: 0.9rem; font-weight: 700; color: var(--white); line-height: 1.15; }
+.pill-date { font-size: 0.56rem; color: var(--teal-lt); font-weight: 500; }
+.pill.active { background: var(--white); border-color: var(--white); }
+.pill.active .pill-pre  { color: var(--teal-mid); }
+.pill.active .pill-num  { color: var(--teal); }
+.pill.active .pill-date { color: var(--ink); font-weight: 600; }
+.pill.today  { border-color: #f0b860; }
+.pill.today .pill-num { color: #f0b860; }
+.pill.today.active .pill-num { color: var(--teal); }
+.today-dot { width: 4px; height: 4px; border-radius: 50%; background: #f0b860; margin-top: 2px; }
+.pill.active .today-dot { background: var(--teal); }
 
-.today-dot {
-  width: 4px; height: 4px;
-  border-radius: 50%;
-  background: #f0b860;
-  margin-top: 1px;
-}
-.day-pill.active .today-dot { background: var(--teal); }
+/* ─── DAY PANEL ────────────────────────────────────────────────────────────── */
+main { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
 
-/* ─── DYNAMIC FLEX MAIN CONTENT ────────────────────────────────────────────── */
-main {
-  flex: 1 1 0;
-  min-height: 0;
-  background: var(--white);
-  display: flex;
-  flex-direction: column;
-}
-.day-panel { 
-  display: none; 
-  flex: 1 1 0; 
-  min-height: 0; 
-  flex-direction: column; 
-}
-.day-panel.active { display: flex; }
+.panel { display: none; flex: 1 1 0; min-height: 0; flex-direction: column; }
+.panel.active { display: flex; }
 
-.day-header {
-  padding: 10px 16px 8px;
+.panel-head {
+  padding: 9px 14px 7px;
   border-bottom: 1px solid var(--parch-dk);
-  background: linear-gradient(to bottom, #fdfcf9, var(--white));
+  background: linear-gradient(to bottom, #fdfcf9, #fff);
   flex-shrink: 0;
 }
-.day-header-row {
+.panel-head-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
 }
-.day-label {
-  font-family: var(--font-d);
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--teal);
-  line-height: 1;
-}
-.day-date {
-  font-size: 0.75rem;
-  color: var(--muted);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.day-venue {
-  font-size: 0.7rem;
-  color: var(--teal-mid);
-  font-weight: 500;
-  margin-top: 2px;
-}
+.daylabel { font-family: var(--font-d); font-size: 1.25rem; font-weight: 700; color: var(--teal); line-height: 1; }
+.daydate  { font-size: 0.72rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.dayvenue { font-size: 0.68rem; color: var(--teal-mid); font-weight: 500; margin-top: 2px; }
 
-/* ─── BATCH LEGEND ─────────────────────────────────────────────────────────── */
+/* ─── LEGEND ───────────────────────────────────────────────────────────────── */
 .legend {
-  display: flex;
-  gap: 12px;
-  padding: 6px 16px;
+  display: flex; gap: 14px;
+  padding: 5px 14px;
   background: var(--parch-dk);
   border-bottom: 1px solid rgba(0,0,0,0.05);
   flex-shrink: 0;
 }
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #333;
-}
-.legend-swatch {
-  width: 10px; height: 10px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-.sw-b1 { background: var(--coral); }
-.sw-b2 { background: var(--gold); }
+.leg-item { display: flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 600; color: #333; }
+.leg-sw { width: 10px; height: 10px; border-radius: 2px; }
+.sw1 { background: var(--coral); }
+.sw2 { background: var(--gold);  }
 
-/* ─── TIMELINE GRAPHICS (PURE CSS PERCENTAGES) ────────────────────────────── */
+/* ─── TIMELINE (CSS-PERCENTAGE BASED — NO JS GRID_H NEEDED) ──────────────── */
 .timeline {
-  display: flex;
-  padding: 8px 12px 12px 0;
   flex: 1 1 0;
   min-height: 0;
-  position: relative;
+  display: flex;
+  padding: 6px 10px 10px 0;
+  overflow-y: auto;        /* Only this scrolls */
+  -webkit-overflow-scrolling: touch;
 }
-.time-axis {
-  width: 52px; /* Fixed width gives "11:30am" enough breathing room */
+/* Minimum height guarantees slots have enough room even on shortest phones */
+.tl-inner {
+  display: flex;
+  width: 100%;
+  min-height: max(100%, 600px);
+}
+.taxis {
+  width: 48px;
   flex-shrink: 0;
   position: relative;
-  height: 100%;
 }
 .tick {
   position: absolute;
-  right: 6px;
-  font-size: 0.62rem;
+  right: 5px;
+  font-size: 0.6rem;
   font-weight: 600;
   color: var(--muted);
   transform: translateY(-50%);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em; 
-  text-align: right;
+  letter-spacing: -0.02em;
 }
 .grid {
   flex: 1;
   position: relative;
-  height: 100%;
 }
-.hline {
-  position: absolute;
-  left: 0; right: 0;
-  height: 1px;
-  background: rgba(0,0,0,0.08);
-}
+.hline { position: absolute; left: 0; right: 0; height: 1px; background: rgba(0,0,0,0.07); }
 
-/* ─── SLOTS GENERAL STYLING ────────────────────────────────────────────────── */
+/* ─── SLOT THEMES ──────────────────────────────────────────────────────────── */
 .slot {
   position: absolute;
   left: 0; right: 0;
   border-radius: var(--radius);
-  overflow: hidden; /* Contains standard overflow */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 3px 5px; /* Extremely tight precision padding */
-  font-size: 0.7rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-  min-height: 22px; /* Base defense against 0 height collapse */
+  padding: 3px 5px;
+  font-size: 0.68rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  min-height: 18px;
   z-index: 1;
+  transition: box-shadow 0.15s;
 }
-.slot-name {
-  font-weight: 700;
-  line-height: 1.1;
-  color: inherit;
-}
-.slot-fac {
-  font-size: 0.62rem;
-  line-height: 1.15;
-  margin-top: 1px;
-  opacity: 0.85;
-  font-weight: 500;
-}
-.slot-tag {
-  font-size: 0.55rem;
-  margin-top: auto;
-  font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  font-weight: 600;
-  opacity: 0.7;
-}
+.slot:active { z-index: 20; overflow: visible; height: auto !important; box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+.sn { font-weight: 700; line-height: 1.15; }
+.sf { font-size: 0.6rem; line-height: 1.2; margin-top: 1px; opacity: 0.8; font-weight: 500; }
+.st { font-size: 0.54rem; margin-top: auto; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; opacity: 0.65; }
 
-/* INTERACTIVE UX: Auto-expand tight text boxes on tap/hover */
-.slot:hover, .slot:active { z-index: 20; }
-.slot:hover, .slot:active, 
-.half:hover, .half:active, 
-.asym-tall:hover, .asym-tall:active, 
-.asym-sub:hover, .asym-sub:active {
-  height: auto !important; 
-  min-height: max-content;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-  z-index: 25;
-}
+.s-meal   { background:var(--meal-bg);   border-left:3px solid var(--meal-bd);   flex-direction:row; align-items:center; gap:4px; }
+.s-meal   .sn { color:#8b6020; font-size:0.72rem; }
+.s-meal   .mi { font-size:0.85rem; flex-shrink:0; }
+.s-snack  { background:var(--snack-bg);  border-left:3px solid var(--snack-bd);  justify-content:center; }
+.s-snack  .sn { color:#7a5010; font-size:0.63rem; letter-spacing:-0.01em; }
+.s-free   { background:var(--free-bg);   border-left:3px solid var(--free-bd);   }
+.s-free   .sn { color:#4a7a5a; }
+.s-shared { background:var(--shared-bg); border-left:3px solid var(--shared-bd); }
+.s-shared .sn { color:var(--teal); }
+.s-shared .sf { color:var(--teal-mid); }
+.s-orient { background:var(--orient-bg); border-left:3px solid var(--orient-bd); }
+.s-orient .sn { color:#205030; }
+.s-trip   { background:var(--trip-bg);   border-left:3px solid var(--trip-bd);   }
+.s-trip   .sn { color:#704010; }
+.s-trip   .sf { color:#906030; opacity:1; }
+.s-sport  { background:var(--sport-bg);  border-left:3px solid var(--sport-bd);  }
+.s-sport  .sn { color:#2a4080; }
+.s-sport  .sf { color:#5070a0; opacity:1; }
+.s-well   { background:var(--well-bg);   border-left:3px solid var(--well-bd);   }
+.s-well   .sn { color:#503080; }
+.s-well   .sf { color:#7060a0; opacity:1; }
+.s-end    { background:transparent; border:none; border-top:2px dashed var(--parch-dk); border-radius:0; padding:3px 0 0; }
+.s-end    .sn { color:var(--muted); font-style:italic; font-weight:500; }
 
-/* Theme specifics */
-.s-meal   { background: var(--meal-bg);   border-left: 3px solid var(--meal-bd);   flex-direction: row; align-items: center; gap: 4px; }
-.s-meal .slot-name { color: #8b6020; font-size: 0.75rem; }
-.s-meal .meal-icon { font-size: 0.85rem; flex-shrink: 0; }
-.s-free   { background: var(--free-bg);   border-left: 3px solid var(--free-bd);   }
-.s-free .slot-name { color: #4a7a5a; }
-.s-shared { background: var(--shared-bg); border-left: 3px solid var(--shared-bd); }
-.s-shared .slot-name { color: var(--teal); }
-.s-shared .slot-fac  { color: var(--teal-mid); }
-.s-orient { background: var(--orient-bg); border-left: 3px solid var(--orient-bd); }
-.s-orient .slot-name { color: #205030; }
-.s-trip   { background: var(--trip-bg);   border-left: 3px solid var(--trip-bd);   }
-.s-trip .slot-name   { color: #704010; }
-.s-trip .slot-fac    { color: #906030; opacity: 1; }
-.s-sport  { background: var(--sport-bg);  border-left: 3px solid var(--sport-bd);  }
-.s-sport .slot-name  { color: #2a4080; }
-.s-sport .slot-fac   { color: #5070a0; opacity: 1; }
-.s-well   { background: var(--well-bg);   border-left: 3px solid var(--well-bd);   }
-.s-well .slot-name   { color: #503080; }
-.s-well .slot-fac    { color: #7060a0; opacity: 1; }
-.s-end {
-  border: none; background: transparent;
-  border-top: 2px dashed var(--parch-dk);
-  border-radius: 0;
-  padding: 4px 0 0;
-}
-.s-end .slot-name { color: var(--muted); font-style: italic; font-weight: 500; }
-
-/* Micro-Typography applied to Snack/AMA boxes so they natively fit better */
-.s-snack  { 
-  background: var(--snack-bg);  
-  border-left: 3px solid var(--snack-bd);
-  justify-content: center;
-}
-.s-snack .slot-name, .h-snack .slot-name { 
-  color: #7a5010; 
-  font-size: 0.65rem; 
-  line-height: 1.05; 
-  letter-spacing: -0.01em; 
-}
-
-/* ─── LAYOUT STRUCTURAL VARIATIONS (SPLIT / ASYMMETRIC) ───────────────────── */
-.slot-split, .slot-asym {
+/* ─── SPLIT SLOTS ──────────────────────────────────────────────────────────── */
+.ss, .sa {
   position: absolute;
   left: 0; right: 0;
   display: flex;
   flex-direction: row;
   gap: var(--gap);
-  padding: 0;
   background: transparent;
-  overflow: visible; /* Lets inner halves expand on hover */
   z-index: 2;
 }
-.slot-split:hover, .slot-asym:hover { z-index: 20; height: auto !important; }
-
-.slot-split > *, .slot-asym > * {
+.ss > *, .sa > * {
   flex: 1 1 0% !important;
   min-width: 0;
-  max-width: calc(50% - 1.5px);
+  max-width: calc(50% - 2px);
 }
-.half, .asym-tall, .asym-sub {
+.h {
   border-radius: var(--radius);
   overflow: hidden;
   padding: 3px 5px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-  min-height: 22px;
-  position: relative;
+  min-height: 18px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
 }
-.half .slot-name, .asym-sub .slot-name, .asym-tall .slot-name { font-size: 0.65rem; font-weight: 700; line-height: 1.1; color: var(--ink); }
-.half .slot-fac, .asym-sub .slot-fac, .asym-tall .slot-fac   { font-size: 0.58rem;  line-height: 1.15; margin-top: 2px; color: #444; font-weight: 500; }
-.half .slot-tag, .asym-sub .slot-tag, .asym-tall .slot-tag   { font-size: 0.52rem; margin-top: auto; font-weight: 600; text-transform: uppercase; color: #666; }
+.h:active { overflow: visible; height: auto !important; z-index: 25; box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+.h .sn { font-size: 0.63rem; font-weight: 700; line-height: 1.15; color: var(--ink); }
+.h .sf { font-size: 0.57rem; line-height: 1.2;  margin-top: 2px;  color: #444; font-weight: 500; }
+.h .st { font-size: 0.5rem;  margin-top: auto; font-weight: 600;  text-transform: uppercase; color: #666; }
+.hb1 { background:var(--coral-lt); border-left:3px solid var(--coral); }
+.hb2 { background:var(--gold-lt);  border-left:3px solid var(--gold);  }
+.h-trip   { background:var(--trip-bg);   border-left:3px solid var(--trip-bd); }
+.h-orient { background:var(--orient-bg); border-left:3px solid var(--orient-bd); }
+.h-snack  { background:var(--snack-bg);  border-left:3px solid var(--snack-bd); justify-content:center; }
+.h-free   { background:var(--free-bg);   border-left:3px solid var(--free-bd);  }
+.h-sport  { background:var(--sport-bg);  border-left:3px solid var(--sport-bd); }
+.h-empty  { background:transparent; border:none; box-shadow:none; }
+.h-trip   .sn { color:#704010; } .h-trip   .sf { color:#906030; }
+.h-orient .sn { color:#205030; }
+.h-snack  .sn { color:#7a5010; font-size:0.6rem; }
+.h-free   .sn { color:#4a7a5a; }
+.h-sport  .sn { color:#2a4080; } .h-sport  .sf { color:#5070a0; }
 
-.h-b1 { background: var(--coral-lt); border-left: 3px solid var(--coral); }
-.h-b2 { background: var(--gold-lt);  border-left: 3px solid var(--gold);  }
-.h-trip   { background: var(--trip-bg);   border-left: 3px solid var(--trip-bd); }
-.h-orient { background: var(--orient-bg); border-left: 3px solid var(--orient-bd); }
-.h-snack  { background: var(--snack-bg);  border-left: 3px solid var(--snack-bd); justify-content: center; }
-.h-free   { background: var(--free-bg);   border-left: 3px solid var(--free-bd);  }
-.h-sport  { background: var(--sport-bg);  border-left: 3px solid var(--sport-bd); }
-.h-empty  { background: transparent; border: none; box-shadow: none; }
-
-.h-trip .slot-name   { color: #704010; }
-.h-trip .slot-fac    { color: #906030; }
-.h-orient .slot-name { color: #205030; }
-.h-free .slot-name   { color: #4a7a5a; }
-.h-sport .slot-name  { color: #2a4080; }
-.h-sport .slot-fac   { color: #5070a0; }
-
-.asym-stack {
-  position: relative;
-  width: 100%;
-}
-.asym-sub {
+/* ─── ASYMMETRIC SLOT ──────────────────────────────────────────────────────── */
+.astack { position: relative; width: 100%; height: 100%; }
+.asub   {
   position: absolute;
   left: 0; right: 0;
-}
-
-/* ─── NOW LINE GRAPHIC ─────────────────────────────────────────────────────── */
-.now-line {
-  position: absolute;
-  left: -2px; right: 0;
-  pointer-events: none;
-  z-index: 30; /* Overrides expanded boxes */
+  border-radius: var(--radius);
+  overflow: hidden;
+  padding: 3px 5px;
   display: flex;
-  align-items: center;
-  gap: 4px;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 16px;
 }
-.now-line::before {
-  content: '';
-  position: absolute;
-  left: 12px; right: 0;
-  height: 2px;
-  background: var(--coral);
-  border-radius: 1px;
+.asub:active { overflow: visible; height: auto !important; z-index: 25; box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+.asub .sn { font-size: 0.63rem; font-weight: 700; line-height: 1.15; color: var(--ink); }
+.asub .sf { font-size: 0.57rem; line-height: 1.2;  margin-top: 2px;  color: #444; }
+.asub .st { font-size: 0.5rem;  margin-top: auto; font-weight: 600; text-transform: uppercase; color: #666; }
+
+/* ─── NOW LINE ─────────────────────────────────────────────────────────────── */
+.nowline {
+  position: absolute; left:-2px; right:0;
+  pointer-events: none; z-index: 30;
+  display: flex; align-items: center; gap: 4px;
 }
-.now-pill {
+.nowline::before {
+  content:''; position:absolute;
+  left:14px; right:0; height:2px;
+  background:var(--coral); border-radius:1px;
+}
+.nowpill {
   position: relative;
-  background: var(--coral);
-  color: white;
-  font-size: 0.6rem;
-  font-weight: 700;
-  padding: 2px 5px;
-  border-radius: 4px;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
+  background: var(--coral); color: #fff;
+  font-size: 0.58rem; font-weight: 700;
+  padding: 2px 5px; border-radius: 4px;
+  white-space: nowrap; font-variant-numeric: tabular-nums;
   z-index: 1;
 }
 
 /* ─── FOOTER ───────────────────────────────────────────────────────────────── */
-.site-footer {
+.ftr {
   text-align: center;
-  padding: 12px;
-  font-size: 0.7rem;
+  padding: 10px 14px;
+  font-size: 0.65rem;
   color: var(--muted);
   font-weight: 500;
   border-top: 1px solid var(--parch-dk);
@@ -490,529 +358,446 @@ main {
   flex-shrink: 0;
 }
 
-/* ─── SCREEN SIZE OPTIMIZATIONS (TABLET & LAPTOP MODE) ────────────────────── */
+/* ─── RESPONSIVE ───────────────────────────────────────────────────────────── */
+@media (min-width: 480px) {
+  html { font-size: 14.5px; }
+  .pill { min-width: 66px; padding: 5px 10px; }
+  .pill-num { font-size: 1rem; }
+}
 @media (min-width: 768px) {
   html { font-size: 15px; }
-  .site-header { padding: 16px 24px 12px; }
-  .header-title h1 { font-size: 1.4rem; }
-  .header-title p { font-size: 0.9rem; }
-  .day-strip { gap: 10px; justify-content: flex-start; }
-  .day-pill { min-width: 90px; padding: 8px 12px; border-radius: 8px; }
-  .day-pill .pill-prefix { font-size: 0.65rem; }
-  .day-pill .pill-num { font-size: 1.2rem; }
-  .day-pill .pill-date { font-size: 0.72rem; }
-  .day-header { padding: 18px 24px 14px; }
-  .day-label { font-size: 1.8rem; }
-  .day-date { font-size: 0.9rem; }
-  .legend { padding: 8px 24px; }
-  .timeline { padding: 16px 24px 32px 0; }
-  
-  .time-axis { width: 66px; } 
-  .tick { font-size: 0.75rem; right: 8px; letter-spacing: normal; }
-  
-  .slot { padding: 6px 10px; font-size: 0.8rem; }
-  .slot-fac { font-size: 0.7rem; margin-top: 3px; }
-  .s-snack .slot-name { font-size: 0.75rem; } /* Text expands correctly back out */
-  .half, .asym-tall, .asym-sub { padding: 6px 10px; }
-  .half .slot-name, .asym-sub .slot-name, .asym-tall .slot-name { font-size: 0.78rem; }
-  .half .slot-fac, .asym-sub .slot-fac, .asym-tall .slot-fac { font-size: 0.68rem; margin-top: 2px; }
+  .hdr { padding: 14px 24px 12px; }
+  .hdr-title h1 { font-size: 1.1rem; }
+  .hdr-title p  { font-size: 0.8rem; }
+  .pill { min-width: 80px; padding: 7px 12px; }
+  .pill-num { font-size: 1.1rem; }
+  .pill-date { font-size: 0.65rem; }
+  .daylabel { font-size: 1.5rem; }
+  .taxis { width: 58px; }
+  .tick { font-size: 0.68rem; right: 7px; }
+  .slot { font-size: 0.75rem; padding: 5px 8px; }
+  .h .sn { font-size: 0.7rem; }
+  .h .sf { font-size: 0.63rem; }
 }
-
 @media (min-width: 1024px) {
   html { font-size: 16px; }
-  .app-container {
-    margin: 16px auto;
-    border-radius: 12px;
-    height: calc(100dvh - 32px);
-    max-height: calc(100dvh - 32px);
-  }
+  .app { margin: 20px auto; border-radius: 14px; height: calc(100dvh - 40px); box-shadow: 0 4px 40px rgba(0,0,0,0.12); }
 }
 </style>
 </head>
 <body>
+<div class="app">
 
-<div class="app-container">
-  <header class="site-header">
-    <div class="header-top">
-      <div class="header-title">
+  <header class="hdr">
+    <div class="hdr-top">
+      <div class="hdr-title">
         <h1>FLAME University Summer Immersion Program (FUSIP) 2026</h1>
         <p>June 29 – July 08, 2026</p>
       </div>
-      <a class="whatsapp-btn" id="share-btn" href="#" onclick="shareWhatsApp(); return false;">
+      <a class="wa-btn" href="#" onclick="shareWA();return false;">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Share
       </a>
     </div>
-    <div class="day-strip" id="day-strip"></div>
+    <div class="day-strip" id="strip"></div>
   </header>
 
   <main id="main"></main>
 
-  <footer class="site-footer">
-    FLAME University · FUSIP 2026 · All times IST
-  </footer>
-</div>
+  <footer class="ftr">FLAME University · FUSIP 2026 · All times IST</footer>
 
+</div>
 <script>
-const SCHEDULE = {
-  batch1: "Batch 1 (CHK 001)",
-  batch2: "Batch 2 (CHK 101)",
+// ═══════════════════════════════════════════════════════════════════════
+// SCHEDULE DATA  — edit this block to update any session, time or name
+// ═══════════════════════════════════════════════════════════════════════
+const S = {
+  b1: "Batch 1 (CHK 001)",
+  b2: "Batch 2 (CHK 101)",
   days: [
     {
-      num: 1, weekday: "Monday", date: "29 June", venue: null,
-      ticks: ["7am","8am","9am","12pm","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
-      slots: [
-        {type:"meal",   start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
-        {type:"shared", start:"09:00", end:"12:00", label:"Arrival, Registration & Room Allocation"},
-        {type:"orient", start:"12:00", end:"13:30", label:"Welcome & Orientation"},
-        {type:"meal",   start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
-        {type:"free",   start:"14:30", end:"16:30", label:"Free Time"},
-        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack"},
-        {type:"shared", start:"17:00", end:"18:00", label:"Campus Tour"},
-        {type:"shared", start:"18:00", end:"19:00", label:"Ice Breakers", fac:"Kalidas"},
-        {type:"free",   start:"19:00", end:"20:00", label:"Free Time"},
-        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      n:1, wd:"Monday", dt:"29 June", venue:null,
+      ticks:["7am","8am","9am","12pm","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
+      slots:[
+        {t:"meal",  s:"08:00",e:"09:00",label:"Breakfast",icon:"🍽"},
+        {t:"shared",s:"09:00",e:"12:00",label:"Arrival, Registration & Room Allocation"},
+        {t:"orient",s:"12:00",e:"13:30",label:"Welcome & Orientation"},
+        {t:"meal",  s:"13:30",e:"14:30",label:"Lunch",icon:"🍽"},
+        {t:"free",  s:"14:30",e:"16:30",label:"Free Time"},
+        {t:"snack", s:"16:30",e:"17:00",label:"☕ Evening Snack"},
+        {t:"shared",s:"17:00",e:"18:00",label:"Campus Tour"},
+        {t:"shared",s:"18:00",e:"19:00",label:"Ice Breakers",fac:"Kalidas"},
+        {t:"free",  s:"19:00",e:"20:00",label:"Free Time"},
+        {t:"meal",  s:"20:00",e:"21:00",label:"Dinner",icon:"🍽"},
       ]
     },
     {
-      num: 2, weekday: "Tuesday", date: "30 June", venue: null,
-      ticks: ["7am","8am","9am","10am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
-      slots: [
-        {type:"meal", start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
-        {type:"asym", start:"09:00", end:"11:00",
-          tall:{side:"b1", label:"CaseLab: Business Decisions Through Comic Cases", fac:"Neha Yadav", tag:"Case Study"},
+      n:2, wd:"Tuesday", dt:"30 June", venue:null,
+      ticks:["7am","8am","9am","10am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
+      slots:[
+        {t:"meal",s:"08:00",e:"09:00",label:"Breakfast",icon:"🍽"},
+        {t:"asym",s:"09:00",e:"11:00",
+          tall:{side:"b1",label:"CaseLab: Business Decisions Through Comic Cases",fac:"Neha Yadav",tag:"Case Study"},
           stack:[
-            {start:"09:00", end:"10:00", label:"Gen Z to Zen Z", fac:"Moitrayee Das", tag:"", cls:"b2"},
-            {start:"10:00", end:"11:00", label:"Outreach",        fac:"Anju Deoskar",  tag:"", cls:"b2"},
+            {s:"09:00",e:"10:00",label:"Gen Z to Zen Z",fac:"Moitrayee Das",cls:"b2"},
+            {s:"10:00",e:"11:00",label:"Outreach",fac:"Anju Deoskar",cls:"b2"},
           ]},
-        {type:"snack",  start:"11:00", end:"11:30", label:"☕ Snacks"},
-        {type:"split",  start:"11:30", end:"13:30",
-          b1:{label:"Hit the Road",                                   fac:"Jaslene Bawa", tag:"Finance"},
-          b2:{label:"CaseLab: Business Decisions Through Comic Cases", fac:"Neha Yadav",   tag:"Case Study"}},
-        {type:"meal",   start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
-        {type:"split",  start:"14:30", end:"16:30",
-          b1:{label:"Marketing Essentials", fac:"Aakash Kamble", tag:"Marketing"},
-          b2:{label:"Hit the Road",         fac:"Jaslene Bawa",  tag:"Finance"}},
-        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack"},
-        {type:"free",   start:"17:00", end:"18:00", label:"Free Time"},
-        {type:"sport",  start:"18:00", end:"19:00", label:"🏃 Zumba", fac:"Arjuna · 160 students"},
-        {type:"free",   start:"19:00", end:"20:00", label:"Free Time"},
-        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+        {t:"snack",s:"11:00",e:"11:30",label:"☕ Snacks"},
+        {t:"split",s:"11:30",e:"13:30",
+          b1:{label:"Hit the Road",fac:"Jaslene Bawa",tag:"Finance"},
+          b2:{label:"CaseLab: Business Decisions Through Comic Cases",fac:"Neha Yadav",tag:"Case Study"}},
+        {t:"meal",s:"13:30",e:"14:30",label:"Lunch",icon:"🍽"},
+        {t:"split",s:"14:30",e:"16:30",
+          b1:{label:"Marketing Essentials",fac:"Aakash Kamble",tag:"Marketing"},
+          b2:{label:"Hit the Road",fac:"Jaslene Bawa",tag:"Finance"}},
+        {t:"snack",s:"16:30",e:"17:00",label:"☕ Evening Snack"},
+        {t:"free", s:"17:00",e:"18:00",label:"Free Time"},
+        {t:"sport",s:"18:00",e:"19:00",label:"🏃 Zumba",fac:"Arjuna · 160 students"},
+        {t:"free", s:"19:00",e:"20:00",label:"Free Time"},
+        {t:"meal", s:"20:00",e:"21:00",label:"Dinner",icon:"🍽"},
       ]
     },
     {
-      num: 3, weekday: "Wednesday", date: "1 July", venue: null,
-      ticks: ["7am","8am","9am","12pm","4:30pm","5pm","8pm","9pm"],
-      slots: [
-        {type:"split", start:"07:00", end:"08:00",
-          b1:{label:"", cls:"empty"},
-          b2:{label:"🍽 Early Breakfast", fac:"Before departure", cls:"b2"}},
-        {type:"split", start:"08:00", end:"09:00",
-          b1:{label:"🏕 Departs for Garud Machi", fac:"Breakfast served at camp", cls:"trip"},
-          b2:{label:"Pre-Departure Orientation",  fac:"Shivakumar Jolad",         cls:"orient"}},
-        {type:"asym", start:"09:00", end:"20:00",
-          tall:{side:"b1", label:"🏕 High Places Outdoor Camp", fac:"Garud Machi", tag:"Returns at dinner", cls:"trip"},
+      n:3, wd:"Wednesday", dt:"1 July", venue:null,
+      ticks:["7am","8am","9am","12pm","4:30pm","5pm","8pm","9pm"],
+      slots:[
+        {t:"split",s:"07:00",e:"08:00",
+          b1:{label:"",cls:"empty"},
+          b2:{label:"🍽 Early Breakfast",fac:"Before departure",cls:"b2"}},
+        {t:"split",s:"08:00",e:"09:00",
+          b1:{label:"🏕 Departs for Garud Machi",fac:"Breakfast served at camp",cls:"trip"},
+          b2:{label:"Pre-Departure Orientation",fac:"Shivakumar Jolad",cls:"orient"}},
+        {t:"asym",s:"09:00",e:"20:00",
+          tall:{side:"b1",label:"🏕 High Places Outdoor Camp",fac:"Garud Machi",tag:"Returns at dinner",cls:"trip"},
           stack:[
-            {start:"09:00", end:"16:30", label:"🌾 Rural Immersion", fac:"Field trip",  tag:"Returns 4:30 pm", cls:"trip"},
-            {start:"16:30", end:"17:00", label:"☕ Evening Snack",    fac:"",            tag:"",               cls:"snack"},
-            {start:"17:00", end:"20:00", label:"Free Time",           fac:"",            tag:"",               cls:"free"},
+            {s:"09:00",e:"16:30",label:"🌾 Rural Immersion",fac:"Field trip",tag:"Returns 4:30 pm",cls:"trip"},
+            {s:"16:30",e:"17:00",label:"☕ Evening Snack",fac:"",cls:"snack"},
+            {s:"17:00",e:"20:00",label:"Free Time",fac:"",cls:"free"},
           ]},
-        {type:"meal", start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+        {t:"meal",s:"20:00",e:"21:00",label:"Dinner",icon:"🍽"},
       ]
     },
     {
-      num: 4, weekday: "Thursday", date: "2 July", venue: null,
-      ticks: ["7am","8am","9am","10am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
-      slots: [
-        {type:"meal", start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
-        {type:"asym", start:"09:00", end:"11:00",
-          tall:{side:"b2", label:"Marketing Essentials", fac:"Aakash Kamble", tag:"Marketing"},
+      n:4, wd:"Thursday", dt:"2 July", venue:null,
+      ticks:["7am","8am","9am","10am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
+      slots:[
+        {t:"meal",s:"08:00",e:"09:00",label:"Breakfast",icon:"🍽"},
+        {t:"asym",s:"09:00",e:"11:00",
+          tall:{side:"b2",label:"Marketing Essentials",fac:"Aakash Kamble",tag:"Marketing"},
           stack:[
-            {start:"09:00", end:"10:00", label:"Outreach",       fac:"Anju Deoskar",  tag:"", cls:"b1"},
-            {start:"10:00", end:"11:00", label:"Gen Z to Zen Z", fac:"Moitrayee Das", tag:"", cls:"b1"},
+            {s:"09:00",e:"10:00",label:"Outreach",fac:"Anju Deoskar",cls:"b1"},
+            {s:"10:00",e:"11:00",label:"Gen Z to Zen Z",fac:"Moitrayee Das",cls:"b1"},
           ]},
-        {type:"snack", start:"11:00", end:"11:30", label:"☕ Snacks"},
-        {type:"split", start:"11:30", end:"13:30",
-          b1:{label:"Entrepreneurs Are Made, Not Born", fac:"Vishal Shah", tag:"Entrepreneurship"},
-          b2:{label:"Colours in Nature",                fac:"Atul Joshi",  tag:"Physical & Natural Sciences"}},
-        {type:"meal",  start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
-        {type:"split", start:"14:30", end:"16:30",
-          b1:{label:"Introduction to Game Theory: Thinking Strategically", fac:"Arun Kumar Kaushik", tag:"Economics"},
-          b2:{label:"Applied AI: Building and Learning with AI",           fac:"Sorabh Bajaj",       tag:"Digital Learning"}},
-        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack"},
-        {type:"well",   start:"17:00", end:"18:00", label:"Wonders of Wellness 1", fac:"Suniti Vadalkar · APJ Design Lab · 25 students"},
-        {type:"split",  start:"18:00", end:"19:00",
-          b1:{label:"🏀 Basketball", fac:"Basketball Court · Batch 1A", cls:"sport"},
-          b2:{label:"🏓 Pickleball", fac:"Pickleball Court · Batch 2A", cls:"sport"}},
-        {type:"split",  start:"19:00", end:"20:00",
-          b1:{label:"🏀 Basketball", fac:"Basketball Court · Batch 1B", cls:"sport"},
-          b2:{label:"🏓 Pickleball", fac:"Pickleball Court · Batch 2B", cls:"sport"}},
-        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+        {t:"snack",s:"11:00",e:"11:30",label:"☕ Snacks"},
+        {t:"split",s:"11:30",e:"13:30",
+          b1:{label:"Entrepreneurs Are Made, Not Born",fac:"Vishal Shah",tag:"Entrepreneurship"},
+          b2:{label:"Colours in Nature",fac:"Atul Joshi",tag:"Physical & Natural Sciences"}},
+        {t:"meal",s:"13:30",e:"14:30",label:"Lunch",icon:"🍽"},
+        {t:"split",s:"14:30",e:"16:30",
+          b1:{label:"Introduction to Game Theory: Thinking Strategically",fac:"Arun Kumar Kaushik",tag:"Economics"},
+          b2:{label:"Applied AI: Building and Learning with AI",fac:"Sorabh Bajaj",tag:"Digital Learning"}},
+        {t:"snack",s:"16:30",e:"17:00",label:"☕ Evening Snack"},
+        {t:"well", s:"17:00",e:"18:00",label:"Wonders of Wellness 1",fac:"Suniti Vadalkar · APJ Design Lab · 25 students"},
+        {t:"split",s:"18:00",e:"19:00",
+          b1:{label:"🏀 Basketball",fac:"Basketball Court · Batch 1A",cls:"sport"},
+          b2:{label:"🏓 Pickleball",fac:"Pickleball Court · Batch 2A",cls:"sport"}},
+        {t:"split",s:"19:00",e:"20:00",
+          b1:{label:"🏀 Basketball",fac:"Basketball Court · Batch 1B",cls:"sport"},
+          b2:{label:"🏓 Pickleball",fac:"Pickleball Court · Batch 2B",cls:"sport"}},
+        {t:"meal",s:"20:00",e:"21:00",label:"Dinner",icon:"🍽"},
       ]
     },
     {
-      num: 5, weekday: "Friday", date: "3 July", venue: null,
-      ticks: ["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
-      slots: [
-        {type:"meal",  start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
-        {type:"split", start:"09:00", end:"11:00",
-          b1:{label:"Film Appreciation",                       fac:"Ramna Walia",    tag:"Media & Journalism"},
-          b2:{label:"Through the Kaleidoscope of Neurodiversity", fac:"Abha Basargekar", tag:"Psychology"}},
-        {type:"snack", start:"11:00", end:"11:30", label:"☕ Snacks"},
-        {type:"split", start:"11:30", end:"13:30",
-          b1:{label:"Colours in Nature",              fac:"Atul Joshi",  tag:"Physical & Natural Sciences"},
-          b2:{label:"Entrepreneurs Are Made, Not Born", fac:"Vishal Shah", tag:"Entrepreneurship"}},
-        {type:"meal",  start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
-        {type:"split", start:"14:30", end:"16:30",
-          b1:{label:"Writing as a Form of Thinking", fac:"Labanya Unni",  tag:"Academic Writing"},
-          b2:{label:"Film Appreciation",             fac:"Ramna Walia",   tag:"Media & Journalism"}},
-        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack"},
-        {type:"free",   start:"17:00", end:"18:00", label:"Free Time"},
-        {type:"split",  start:"18:00", end:"19:00",
-          b1:{label:"🏓 Pickleball", fac:"Pickleball Court · Batch 1A", cls:"sport"},
-          b2:{label:"🏀 Basketball", fac:"Basketball Court · Batch 2A", cls:"sport"}},
-        {type:"split",  start:"19:00", end:"20:00",
-          b1:{label:"🏓 Pickleball", fac:"Pickleball Court · Batch 1B", cls:"sport"},
-          b2:{label:"🏀 Basketball", fac:"Basketball Court · Batch 2B", cls:"sport"}},
-        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      n:5, wd:"Friday", dt:"3 July", venue:null,
+      ticks:["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
+      slots:[
+        {t:"meal",s:"08:00",e:"09:00",label:"Breakfast",icon:"🍽"},
+        {t:"split",s:"09:00",e:"11:00",
+          b1:{label:"Film Appreciation",fac:"Ramna Walia",tag:"Media & Journalism"},
+          b2:{label:"Through the Kaleidoscope of Neurodiversity",fac:"Abha Basargekar",tag:"Psychology"}},
+        {t:"snack",s:"11:00",e:"11:30",label:"☕ Snacks"},
+        {t:"split",s:"11:30",e:"13:30",
+          b1:{label:"Colours in Nature",fac:"Atul Joshi",tag:"Physical & Natural Sciences"},
+          b2:{label:"Entrepreneurs Are Made, Not Born",fac:"Vishal Shah",tag:"Entrepreneurship"}},
+        {t:"meal",s:"13:30",e:"14:30",label:"Lunch",icon:"🍽"},
+        {t:"split",s:"14:30",e:"16:30",
+          b1:{label:"Writing as a Form of Thinking",fac:"Labanya Unni",tag:"Academic Writing"},
+          b2:{label:"Film Appreciation",fac:"Ramna Walia",tag:"Media & Journalism"}},
+        {t:"snack",s:"16:30",e:"17:00",label:"☕ Evening Snack"},
+        {t:"free", s:"17:00",e:"18:00",label:"Free Time"},
+        {t:"split",s:"18:00",e:"19:00",
+          b1:{label:"🏓 Pickleball",fac:"Pickleball Court · Batch 1A",cls:"sport"},
+          b2:{label:"🏀 Basketball",fac:"Basketball Court · Batch 2A",cls:"sport"}},
+        {t:"split",s:"19:00",e:"20:00",
+          b1:{label:"🏓 Pickleball",fac:"Pickleball Court · Batch 1B",cls:"sport"},
+          b2:{label:"🏀 Basketball",fac:"Basketball Court · Batch 2B",cls:"sport"}},
+        {t:"meal",s:"20:00",e:"21:00",label:"Dinner",icon:"🍽"},
       ]
     },
     {
-      num: 6, weekday: "Saturday", date: "4 July", venue: null,
-      ticks: ["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
-      slots: [
-        {type:"meal",  start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
-        {type:"split", start:"09:00", end:"11:00",
-          b1:{label:"Through the Kaleidoscope of Neurodiversity", fac:"Abha Basargekar",     tag:"Psychology"},
-          b2:{label:"Introduction to Game Theory: Thinking Strategically", fac:"Arun Kumar Kaushik", tag:"Economics"}},
-        {type:"snack", start:"11:00", end:"11:30", label:"☕ Snacks & FUSIP in Frames AMA"},
-        {type:"split", start:"11:30", end:"13:30",
-          b1:{label:"Introduction to Virtual and Augmented Reality",                  fac:"Rahul Ray",     tag:"Computing & Data Science"},
-          b2:{label:"Climate Solutions: Integrating Scientific Insight into Public Policy", fac:"Anjal Prakash", tag:"Public Policy"}},
-        {type:"meal",  start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
-        {type:"split", start:"14:30", end:"16:30",
-          b1:{label:"Climate Solutions: Integrating Scientific Insight into Public Policy", fac:"Anjal Prakash", tag:"Public Policy"},
-          b2:{label:"Introduction to Virtual and Augmented Reality",                  fac:"Rahul Ray",     tag:"Computing & Data Science"}},
-        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack"},
-        {type:"well",   start:"17:00", end:"18:00", label:"Wonders of Wellness 2", fac:"Suniti Vadalkar · APJ Design Lab · 25 students"},
-        {type:"split",  start:"18:00", end:"19:00",
-          b1:{label:"⚽ Futsal",    fac:"Futsal Court · Batch 1A",    cls:"sport"},
-          b2:{label:"🏸 Badminton", fac:"Badminton Court · Batch 2A", cls:"sport"}},
-        {type:"split",  start:"19:00", end:"20:00",
-          b1:{label:"⚽ Futsal",    fac:"Futsal Court · Batch 1B",    cls:"sport"},
-          b2:{label:"🏸 Badminton", fac:"Badminton Court · Batch 2B", cls:"sport"}},
-        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      n:6, wd:"Saturday", dt:"4 July", venue:null,
+      ticks:["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
+      slots:[
+        {t:"meal",s:"08:00",e:"09:00",label:"Breakfast",icon:"🍽"},
+        {t:"split",s:"09:00",e:"11:00",
+          b1:{label:"Through the Kaleidoscope of Neurodiversity",fac:"Abha Basargekar",tag:"Psychology"},
+          b2:{label:"Introduction to Game Theory: Thinking Strategically",fac:"Arun Kumar Kaushik",tag:"Economics"}},
+        {t:"snack",s:"11:00",e:"11:30",label:"☕ Snacks & FUSIP in Frames AMA"},
+        {t:"split",s:"11:30",e:"13:30",
+          b1:{label:"Introduction to Virtual and Augmented Reality",fac:"Rahul Ray",tag:"Computing & Data Science"},
+          b2:{label:"Climate Solutions: Integrating Scientific Insight into Public Policy",fac:"Anjal Prakash",tag:"Public Policy"}},
+        {t:"meal",s:"13:30",e:"14:30",label:"Lunch",icon:"🍽"},
+        {t:"split",s:"14:30",e:"16:30",
+          b1:{label:"Climate Solutions: Integrating Scientific Insight into Public Policy",fac:"Anjal Prakash",tag:"Public Policy"},
+          b2:{label:"Introduction to Virtual and Augmented Reality",fac:"Rahul Ray",tag:"Computing & Data Science"}},
+        {t:"snack",s:"16:30",e:"17:00",label:"☕ Evening Snack"},
+        {t:"well", s:"17:00",e:"18:00",label:"Wonders of Wellness 2",fac:"Suniti Vadalkar · APJ Design Lab · 25 students"},
+        {t:"split",s:"18:00",e:"19:00",
+          b1:{label:"⚽ Futsal",fac:"Futsal Court · Batch 1A",cls:"sport"},
+          b2:{label:"🏸 Badminton",fac:"Badminton Court · Batch 2A",cls:"sport"}},
+        {t:"split",s:"19:00",e:"20:00",
+          b1:{label:"⚽ Futsal",fac:"Futsal Court · Batch 1B",cls:"sport"},
+          b2:{label:"🏸 Badminton",fac:"Badminton Court · Batch 2B",cls:"sport"}},
+        {t:"meal",s:"20:00",e:"21:00",label:"Dinner",icon:"🍽"},
       ]
     },
     {
-      num: 7, weekday: "Sunday", date: "5 July", venue: null,
-      ticks: ["7am","8am","9am","12pm","4:30pm","5pm","8pm","9pm"],
-      slots: [
-        {type:"split", start:"07:00", end:"08:00",
-          b1:{label:"🍽 Early Breakfast", fac:"Before departure", cls:"b1"},
-          b2:{label:"", cls:"empty"}},
-        {type:"split", start:"08:00", end:"09:00",
-          b1:{label:"Pre-Departure Orientation", fac:"Shivakumar Jolad", cls:"orient"},
-          b2:{label:"🏕 Departs for Garud Machi", fac:"Breakfast served at camp", cls:"trip"}},
-        {type:"asym", start:"09:00", end:"20:00",
-          tall:{side:"b2", label:"🏕 High Places Outdoor Camp", fac:"Garud Machi", tag:"Returns at dinner", cls:"trip"},
+      n:7, wd:"Sunday", dt:"5 July", venue:null,
+      ticks:["7am","8am","9am","12pm","4:30pm","5pm","8pm","9pm"],
+      slots:[
+        {t:"split",s:"07:00",e:"08:00",
+          b1:{label:"🍽 Early Breakfast",fac:"Before departure",cls:"b1"},
+          b2:{label:"",cls:"empty"}},
+        {t:"split",s:"08:00",e:"09:00",
+          b1:{label:"Pre-Departure Orientation",fac:"Shivakumar Jolad",cls:"orient"},
+          b2:{label:"🏕 Departs for Garud Machi",fac:"Breakfast served at camp",cls:"trip"}},
+        {t:"asym",s:"09:00",e:"20:00",
+          tall:{side:"b2",label:"🏕 High Places Outdoor Camp",fac:"Garud Machi",tag:"Returns at dinner",cls:"trip"},
           stack:[
-            {start:"09:00", end:"16:30", label:"🌾 Rural Immersion", fac:"Field trip",  tag:"Returns 4:30 pm", cls:"trip"},
-            {start:"16:30", end:"17:00", label:"☕ Evening Snack",    fac:"",            tag:"",               cls:"snack"},
-            {start:"17:00", end:"20:00", label:"Free Time",           fac:"",            tag:"",               cls:"free"},
+            {s:"09:00",e:"16:30",label:"🌾 Rural Immersion",fac:"Field trip",tag:"Returns 4:30 pm",cls:"trip"},
+            {s:"16:30",e:"17:00",label:"☕ Evening Snack",fac:"",cls:"snack"},
+            {s:"17:00",e:"20:00",label:"Free Time",fac:"",cls:"free"},
           ]},
-        {type:"meal", start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+        {t:"meal",s:"20:00",e:"21:00",label:"Dinner",icon:"🍽"},
       ]
     },
     {
-      num: 8, weekday: "Monday", date: "6 July", venue: null,
-      ticks: ["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
-      slots: [
-        {type:"meal",  start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
-        {type:"split", start:"09:00", end:"11:00",
-          b1:{label:"Consciousness and God",       fac:"Michael Hatcher", tag:"Philosophy"},
-          b2:{label:"Writing as a Form of Thinking", fac:"Labanya Unni",    tag:"Academic Writing"}},
-        {type:"snack", start:"11:00", end:"11:30", label:"☕ Snacks & FUSIP in Frames AMA"},
-        {type:"split", start:"11:30", end:"13:30",
-          b1:{label:"Learning by Doing / Idea Visualization", fac:"Pathik Desai · APJ Design Lab<br>Shamit Shrivastav · APJ 104", tag:"Design"},
-          b2:{label:"Design Thinking through Storytelling",   fac:"Sherline Pimenta", tag:"Design"}},
-        {type:"meal",  start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
-        {type:"split", start:"14:30", end:"16:30",
-          b1:{label:"Design Thinking through Storytelling",   fac:"Sherline Pimenta", tag:"Design"},
-          b2:{label:"Learning by Doing / Idea Visualization", fac:"Pathik Desai · APJ Design Lab<br>Shamit Shrivastav · APJ 104", tag:"Design"}},
-        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack & FUSIP in Frames AMA"},
-        {type:"free",   start:"17:00", end:"18:00", label:"Free Time"},
-        {type:"split",  start:"18:00", end:"19:00",
-          b1:{label:"🏸 Badminton", fac:"Badminton Court · Batch 1A", cls:"sport"},
-          b2:{label:"⚽ Futsal",    fac:"Futsal Court · Batch 2A",    cls:"sport"}},
-        {type:"split",  start:"19:00", end:"20:00",
-          b1:{label:"🏸 Badminton", fac:"Badminton Court · Batch 1B", cls:"sport"},
-          b2:{label:"⚽ Futsal",    fac:"Futsal Court · Batch 2B",    cls:"sport"}},
-        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      n:8, wd:"Monday", dt:"6 July", venue:null,
+      ticks:["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","7pm","8pm","9pm"],
+      slots:[
+        {t:"meal",s:"08:00",e:"09:00",label:"Breakfast",icon:"🍽"},
+        {t:"split",s:"09:00",e:"11:00",
+          b1:{label:"Consciousness and God",fac:"Michael Hatcher",tag:"Philosophy"},
+          b2:{label:"Writing as a Form of Thinking",fac:"Labanya Unni",tag:"Academic Writing"}},
+        {t:"snack",s:"11:00",e:"11:30",label:"☕ Snacks & FUSIP in Frames AMA"},
+        {t:"split",s:"11:30",e:"13:30",
+          b1:{label:"Learning by Doing / Idea Visualization",fac:"Pathik Desai · APJ Design Lab<br>Shamit Shrivastav · APJ 104",tag:"Design"},
+          b2:{label:"Design Thinking through Storytelling",fac:"Sherline Pimenta",tag:"Design"}},
+        {t:"meal",s:"13:30",e:"14:30",label:"Lunch",icon:"🍽"},
+        {t:"split",s:"14:30",e:"16:30",
+          b1:{label:"Design Thinking through Storytelling",fac:"Sherline Pimenta",tag:"Design"},
+          b2:{label:"Learning by Doing / Idea Visualization",fac:"Pathik Desai · APJ Design Lab<br>Shamit Shrivastav · APJ 104",tag:"Design"}},
+        {t:"snack",s:"16:30",e:"17:00",label:"☕ Evening Snack & FUSIP in Frames AMA"},
+        {t:"free", s:"17:00",e:"18:00",label:"Free Time"},
+        {t:"split",s:"18:00",e:"19:00",
+          b1:{label:"🏸 Badminton",fac:"Badminton Court · Batch 1A",cls:"sport"},
+          b2:{label:"⚽ Futsal",fac:"Futsal Court · Batch 2A",cls:"sport"}},
+        {t:"split",s:"19:00",e:"20:00",
+          b1:{label:"🏸 Badminton",fac:"Badminton Court · Batch 1B",cls:"sport"},
+          b2:{label:"⚽ Futsal",fac:"Futsal Court · Batch 2B",cls:"sport"}},
+        {t:"meal",s:"20:00",e:"21:00",label:"Dinner",icon:"🍽"},
       ]
     },
     {
-      num: 9, weekday: "Tuesday", date: "7 July", venue: null,
-      ticks: ["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","8pm","9pm"],
-      slots: [
-        {type:"meal",  start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
-        {type:"split", start:"09:00", end:"11:00",
-          b1:{label:"Applied AI: Building and Learning with AI", fac:"Sorabh Bajaj",    tag:"Digital Learning"},
-          b2:{label:"Consciousness and God",                      fac:"Michael Hatcher", tag:"Philosophy"}},
-        {type:"snack", start:"11:00", end:"11:30", label:"☕ Snacks"},
-        {type:"split", start:"11:30", end:"13:30",
-          b1:{label:"Technology & Society",           fac:"Mayurakshi Chaudhuri", tag:"Sociology"},
-          b2:{label:"Reading Literature: Why and How", fac:"Tarinee Awasthi",      tag:"Literary & Cultural Studies"}},
-        {type:"meal",  start:"13:30", end:"14:30", label:"Lunch", icon:"🍽"},
-        {type:"split", start:"14:30", end:"16:30",
-          b1:{label:"Reading Literature: Why and How", fac:"Tarinee Awasthi",      tag:"Literary & Cultural Studies"},
-          b2:{label:"Technology & Society",            fac:"Mayurakshi Chaudhuri", tag:"Sociology"}},
-        {type:"snack",  start:"16:30", end:"17:00", label:"☕ Evening Snack"},
-        {type:"well",   start:"17:00", end:"18:00", label:"Wonders of Wellness 3", fac:"Suniti Vadalkar · APJ Design Lab · 25 students"},
-        {type:"free",   start:"18:00", end:"20:00", label:"Free Time"},
-        {type:"meal",   start:"20:00", end:"21:00", label:"Dinner", icon:"🍽"},
+      n:9, wd:"Tuesday", dt:"7 July", venue:null,
+      ticks:["7am","8am","9am","11am","11:30am","1:30pm","2:30pm","4:30pm","5pm","6pm","8pm","9pm"],
+      slots:[
+        {t:"meal",s:"08:00",e:"09:00",label:"Breakfast",icon:"🍽"},
+        {t:"split",s:"09:00",e:"11:00",
+          b1:{label:"Applied AI: Building and Learning with AI",fac:"Sorabh Bajaj",tag:"Digital Learning"},
+          b2:{label:"Consciousness and God",fac:"Michael Hatcher",tag:"Philosophy"}},
+        {t:"snack",s:"11:00",e:"11:30",label:"☕ Snacks"},
+        {t:"split",s:"11:30",e:"13:30",
+          b1:{label:"Technology & Society",fac:"Mayurakshi Chaudhuri",tag:"Sociology"},
+          b2:{label:"Reading Literature: Why and How",fac:"Tarinee Awasthi",tag:"Literary & Cultural Studies"}},
+        {t:"meal",s:"13:30",e:"14:30",label:"Lunch",icon:"🍽"},
+        {t:"split",s:"14:30",e:"16:30",
+          b1:{label:"Reading Literature: Why and How",fac:"Tarinee Awasthi",tag:"Literary & Cultural Studies"},
+          b2:{label:"Technology & Society",fac:"Mayurakshi Chaudhuri",tag:"Sociology"}},
+        {t:"snack",s:"16:30",e:"17:00",label:"☕ Evening Snack"},
+        {t:"well", s:"17:00",e:"18:00",label:"Wonders of Wellness 3",fac:"Suniti Vadalkar · APJ Design Lab · 25 students"},
+        {t:"free", s:"18:00",e:"20:00",label:"Free Time"},
+        {t:"meal", s:"20:00",e:"21:00",label:"Dinner",icon:"🍽"},
       ]
     },
     {
-      num: 10, weekday: "Wednesday", date: "8 July", venue: "📍 Shantiniketan",
-      ticks: ["7am","8am","9am","12:30pm","1:30pm"],
-      slots: [
-        {type:"shared", start:"07:00", end:"08:00", label:"Room Keys Handover"},
-        {type:"meal",   start:"08:00", end:"09:00", label:"Breakfast", icon:"🍽"},
-        {type:"orient", start:"09:00", end:"12:30", label:"Presentations"},
-        {type:"snack",  start:"12:30", end:"13:30", label:"☕ Snacks & Distribution of Certificates"},
-        {type:"end",    start:"13:30", end:"14:00", label:"Program ends — students depart with parents"},
+      n:10, wd:"Wednesday", dt:"8 July", venue:"📍 Shantiniketan",
+      ticks:["7am","8am","9am","12:30pm","1:30pm"],
+      slots:[
+        {t:"shared",s:"07:00",e:"08:00",label:"Room Keys Handover"},
+        {t:"meal",  s:"08:00",e:"09:00",label:"Breakfast",icon:"🍽"},
+        {t:"orient",s:"09:00",e:"12:30",label:"Presentations"},
+        {t:"snack", s:"12:30",e:"13:30",label:"☕ Snacks & Distribution of Certificates"},
+        {t:"end",   s:"13:30",e:"14:00",label:"Program ends — students depart with parents"},
       ]
     },
   ]
 };
 
-// ─── OPTIMIZED CSS-DRIVEN PERCENTAGE RENDERING ENGINE ──────────────────────
-const DAY_START = 7 * 60;  // 7:00 am
-const DAY_END   = 21 * 60; // 9:00 pm
-const SPAN      = DAY_END - DAY_START;
+// ═══════════════════════════════════════════════════════════════════════
+// RENDERING — pure CSS % positioning, no JS pixel measurement
+// ═══════════════════════════════════════════════════════════════════════
+const DS = 7*60, DE = 21*60, SPAN = DE-DS;
 
-function toMins(hhmm) {
-  const [h, m] = hhmm.split(':').map(Number);
-  return h * 60 + m;
-}
+const tm = hhmm => { const [h,m]=hhmm.split(':').map(Number); return h*60+m; };
+const pct = m => ((m-DS)/SPAN*100).toFixed(3);
 
-function toPercent(mins) {
-  return ((mins - DAY_START) / SPAN) * 100;
-}
-
-function parseTick(label) {
+function tickMins(label) {
   const pm = label.includes('pm');
-  const [timePart] = label.split(/(am|pm)/);
-  const [h, m = '0'] = timePart.split(':');
+  const [tp] = label.split(/(am|pm)/);
+  const [h,m='0'] = tp.split(':');
   let hr = parseInt(h);
-  if (pm && hr !== 12) hr += 12;
-  if (!pm && hr === 12) hr = 0;
-  return hr * 60 + parseInt(m);
+  if (pm && hr!==12) hr+=12;
+  if (!pm && hr===12) hr=0;
+  return hr*60+parseInt(m);
 }
 
-const slotClassMap = {
-  meal:'s-meal', snack:'s-snack', free:'s-free', shared:'s-shared',
-  orient:'s-orient', trip:'s-trip', sport:'s-sport', well:'s-well', end:'s-end'
-};
-const halfClassMap = {
-  b1:'h-b1', b2:'h-b2', trip:'h-trip', orient:'h-orient',
-  snack:'h-snack', free:'h-free', sport:'h-sport', empty:'h-empty'
-};
+const CLS = {meal:'s-meal',snack:'s-snack',free:'s-free',shared:'s-shared',orient:'s-orient',trip:'s-trip',sport:'s-sport',well:'s-well',end:'s-end'};
+const HCLS = {b1:'hb1',b2:'hb2',trip:'h-trip',orient:'h-orient',snack:'h-snack',free:'h-free',sport:'h-sport',empty:'h-empty'};
 
-function getInlineStyle(startMin, endMin) {
-  const topPct = toPercent(startMin);
-  const htPct = Math.max(toPercent(endMin) - topPct, 0);
-  return `top: calc(${topPct}% + 1px); height: calc(${htPct}% - 2px);`;
-}
+function pos(s,e) { return `top:calc(${pct(tm(s))}% + 1px);height:calc(${pct(tm(e))-pct(tm(s))}% - 2px);`; }
 
-function renderSlot(s) {
-  const sm = toMins(s.start), em = toMins(s.end);
-  const style = getInlineStyle(sm, em);
-
-  if (s.type === 'meal') {
-    return `<div class="slot s-meal" style="${style}">
-      <span class="meal-icon">${s.icon||'🍽'}</span>
-      <span class="slot-name">${s.label}</span>
-    </div>`;
-  }
+function renderSlot(sl) {
+  const p = pos(sl.s||sl.start, sl.e||sl.end);
   
-  if (['snack', 'free', 'shared', 'orient', 'trip', 'sport', 'well', 'end'].includes(s.type)) {
-    const cls = slotClassMap[s.type] || 's-shared';
-    const fac = s.fac ? `<span class="slot-fac">${s.fac}</span>` : '';
-    return `<div class="slot ${cls}" style="${style}">
-      <span class="slot-name">${s.label}</span>${fac}
-    </div>`;
-  }
+  if (sl.t==='meal')
+    return `<div class="slot s-meal" style="${p}"><span class="mi">${sl.icon||'🍽'}</span><span class="sn">${sl.label}</span></div>`;
   
-  if (s.type === 'split') {
-    const half = (h, defaultSide) => {
-      if (!h) return '';
-      const hcls = halfClassMap[h.cls || defaultSide] || 'h-b1';
-      const fac  = h.fac  ? `<span class="slot-fac">${h.fac}</span>` : '';
-      const tag  = h.tag  ? `<span class="slot-tag">${h.tag}</span>` : '';
-      const name = h.label ? `<span class="slot-name">${h.label}</span>` : '';
-      return `<div class="half ${hcls}">${name}${fac}${tag}</div>`;
+  if (['snack','free','shared','orient','trip','sport','well','end'].includes(sl.t))
+    return `<div class="slot ${CLS[sl.t]}" style="${p}"><span class="sn">${sl.label}</span>${sl.fac?`<span class="sf">${sl.fac}</span>`:''}</div>`;
+  
+  if (sl.t==='split') {
+    const hh = (h,def)=>{
+      if(!h||(!h.label&&h.cls==='empty')) return `<div class="h h-empty"></div>`;
+      const c = HCLS[h.cls||def]||'hb1';
+      return `<div class="h ${c}">${h.label?`<span class="sn">${h.label}</span>`:''
+        }${h.fac?`<span class="sf">${h.fac}</span>`:''
+        }${h.tag?`<span class="st">${h.tag}</span>`:''}</div>`;
     };
-    return `<div class="slot-split" style="${style}">${half(s.b1, 'b1')}${half(s.b2, 'b2')}</div>`;
+    return `<div class="ss" style="${p}">${hh(sl.b1,'b1')}${hh(sl.b2,'b2')}</div>`;
   }
   
-  if (s.type === 'asym') {
-    const t = s.tall;
-    const tallCls = halfClassMap[t.cls || t.side] || 'h-b1';
-    const tallHtml = `<div class="asym-tall ${tallCls}">
-      <span class="slot-name">${t.label}</span>
-      ${t.fac ? `<span class="slot-fac">${t.fac}</span>` : ''}
-      ${t.tag ? `<span class="slot-tag">${t.tag}</span>` : ''}
+  if (sl.t==='asym') {
+    const T=sl.tall, sm=tm(sl.s||sl.start), em=tm(sl.e||sl.end), span=em-sm;
+    const tallCls = HCLS[T.cls||T.side]||'hb1';
+    const tallHtml = `<div class="h ${tallCls}" style="height:100%;">
+      <span class="sn">${T.label}</span>
+      ${T.fac?`<span class="sf">${T.fac}</span>`:''}
+      ${T.tag?`<span class="st">${T.tag}</span>`:''}
     </div>`;
-    
-    const stackCells = s.stack.map(sub => {
-      const subSm = toMins(sub.start);
-      const subTopPct = ((subSm - sm) / (em - sm)) * 100; 
-      const subHtPct = ((toMins(sub.end) - subSm) / (em - sm)) * 100;
-      
-      const scls = halfClassMap[sub.cls || (t.side === 'b1' ? 'b2' : 'b1')] || 'h-b1';
-      return `<div class="asym-sub ${scls}" style="top: ${subTopPct}%; height: calc(${subHtPct}% - 1px);">
-        <span class="slot-name">${sub.label}</span>
-        ${sub.fac ? `<span class="slot-fac">${sub.fac}</span>` : ''}
-        ${sub.tag ? `<span class="slot-tag">${sub.tag}</span>` : ''}
+    const cells = sl.stack.map(sub=>{
+      const ssm=tm(sub.s||sub.start), sem=tm(sub.e||sub.end);
+      const tp=((ssm-sm)/span*100).toFixed(3);
+      const ht=((sem-ssm)/span*100).toFixed(3);
+      const c = HCLS[sub.cls||(T.side==='b1'?'b2':'b1')]||'hb1';
+      return `<div class="asub ${c}" style="top:calc(${tp}% + 1px);height:calc(${ht}% - 2px);">
+        <span class="sn">${sub.label}</span>
+        ${sub.fac?`<span class="sf">${sub.fac}</span>`:''}
+        ${sub.tag?`<span class="st">${sub.tag}</span>`:''}
       </div>`;
     }).join('');
-    
-    const stackHtml = `<div class="asym-stack">${stackCells}</div>`;
-    const [left, right] = t.side === 'b1' ? [tallHtml, stackHtml] : [stackHtml, tallHtml];
-    return `<div class="slot-asym" style="${style}">${left}${right}</div>`;
+    const stack=`<div class="astack">${cells}</div>`;
+    const [L,R]=T.side==='b1'?[tallHtml,stack]:[stack,tallHtml];
+    return `<div class="sa" style="${p}">${L}${R}</div>`;
   }
   return '';
 }
 
 function renderDay(day) {
-  const tickMins  = day.ticks.map(parseTick);
-  const ticksHtml = tickMins.map(m =>
-    `<div class="tick" style="top:${toPercent(m)}%;">${day.ticks[tickMins.indexOf(m)]}</div>`
-  ).join('');
-
-  const hlinesHtml = Array.from({length:15}, (_,i) => (i+7)*60)
-    .filter(m => m <= DAY_END)
-    .map(m => `<div class="hline" style="top:${toPercent(m)}%;"></div>`)
-    .join('');
-
-  const slotsHtml = day.slots.map(renderSlot).join('');
-  const venueLine = day.venue ? `<div class="day-venue"><span>${day.venue}</span></div>` : '';
-
+  const tms = day.ticks.map(tickMins);
+  const ticks = tms.map((m,i)=>`<div class="tick" style="top:${pct(m)}%;">${day.ticks[i]}</div>`).join('');
+  const hlines = Array.from({length:15},(_,i)=>(i+7)*60).filter(m=>m<=DE)
+    .map(m=>`<div class="hline" style="top:${pct(m)}%;"></div>`).join('');
+  const slots = day.slots.map(renderSlot).join('');
+  const venue = day.venue?`<div class="dayvenue">${day.venue}</div>`:'';
   return `
-  <div class="day-panel" id="day-${day.num}" data-day="${day.num}">
-    <div class="day-header">
-      <div class="day-header-row">
-        <span class="day-label">Day ${day.num}</span>
-        <span class="day-date">${day.weekday} · ${day.date}</span>
-      </div>
-      ${venueLine}
+  <div class="panel" id="d${day.n}" data-n="${day.n}">
+    <div class="panel-head">
+      <div class="panel-head-row">
+        <span class="daylabel">Day ${day.n}</span>
+        <span class="daydate">${day.wd} · ${day.dt}</span>
+      </div>${venue}
     </div>
     <div class="legend">
-      <div class="legend-item"><span class="legend-swatch sw-b1"></span>${SCHEDULE.batch1}</div>
-      <div class="legend-item"><span class="legend-swatch sw-b2"></span>${SCHEDULE.batch2}</div>
+      <div class="leg-item"><span class="leg-sw sw1"></span>${S.b1}</div>
+      <div class="leg-item"><span class="leg-sw sw2"></span>${S.b2}</div>
     </div>
     <div class="timeline">
-      <div class="time-axis" id="axis-${day.num}">${ticksHtml}</div>
-      <div class="grid" id="grid-${day.num}">
-        ${hlinesHtml}
-        ${slotsHtml}
-        <div class="now-line" id="now-${day.num}" style="display:none;">
-          <span class="now-pill" id="now-pill-${day.num}"></span>
+      <div class="tl-inner">
+        <div class="taxis">${ticks}</div>
+        <div class="grid">${hlines}${slots}
+          <div class="nowline" id="nl${day.n}" style="display:none;">
+            <span class="nowpill" id="np${day.n}"></span>
+          </div>
         </div>
       </div>
     </div>
   </div>`;
 }
 
-// ─── CONTROLLER ─────────────────────────────────────────────────────────────
-const PROG_START = new Date('2026-06-29');
-
-function getCurrentDay() {
-  const now = new Date();
-  const diff = Math.floor((now - PROG_START) / (1000 * 60 * 60 * 24));
-  return (diff >= 0 && diff < 10) ? diff + 1 : null;
+// ═══════════════════════════════════════════════════════════════════════
+// CONTROLLER
+// ═══════════════════════════════════════════════════════════════════════
+const PROG = new Date('2026-06-29');
+function todayNum() {
+  const d = Math.floor((new Date()-PROG)/(864e5));
+  return (d>=0&&d<10)?d+1:null;
 }
 
-function updateNowLine() {
-  const todayNum = getCurrentDay();
-  if (!todayNum) return;
-  
-  const now = new Date();
-  const mins = now.getHours() * 60 + now.getMinutes();
-  const line = document.getElementById(`now-${todayNum}`);
-  const pill = document.getElementById(`now-pill-${todayNum}`);
-  
-  if (!line || !pill) return;
-  if (mins < DAY_START || mins > DAY_END) { 
-    line.style.display = 'none'; 
-    return; 
-  }
-  
-  line.style.top = `${toPercent(mins)}%`;
-  line.style.display = 'flex';
-  
-  const h12 = now.getHours() % 12 || 12;
-  const ampm = now.getHours() < 12 ? 'am' : 'pm';
-  const mm = String(now.getMinutes()).padStart(2, '0');
-  pill.textContent = `${h12}:${mm}${ampm}`;
+function updateNow() {
+  const tn = todayNum(); if (!tn) return;
+  const now = new Date(), m = now.getHours()*60+now.getMinutes();
+  const nl=document.getElementById('nl'+tn), np=document.getElementById('np'+tn);
+  if (!nl||!np) return;
+  if (m<DS||m>DE){nl.style.display='none';return;}
+  nl.style.top=`${pct(m)}%`; nl.style.display='flex';
+  const h=now.getHours()%12||12, ap=now.getHours()<12?'am':'pm', mm=String(now.getMinutes()).padStart(2,'0');
+  np.textContent=`${h}:${mm}${ap}`;
 }
 
-let activeDay = 1;
-function activateDay(num, scroll = true) {
-  activeDay = num;
-  document.querySelectorAll('.day-pill').forEach(p => {
-    p.classList.toggle('active', parseInt(p.dataset.day) === num);
+let cur=1;
+function go(n,scroll=true){
+  cur=n;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.toggle('active',+p.dataset.n===n));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',+p.dataset.n===n));
+  if(scroll){const el=document.querySelector(`.pill[data-n="${n}"]`);if(el)el.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});}
+  updateNow();
+}
+
+function init(){
+  const strip=document.getElementById('strip');
+  const main=document.getElementById('main');
+  const tn=todayNum();
+  S.days.forEach(day=>{
+    const today=tn===day.n;
+    const btn=document.createElement('button');
+    btn.className=`pill${today?' today':''}`;
+    btn.dataset.n=day.n;
+    btn.innerHTML=`<span class="pill-pre">Day ${day.n}</span><span class="pill-num">${day.wd.slice(0,3)}</span><span class="pill-date">${day.dt}</span>${today?'<span class="today-dot"></span>':''}`;
+    btn.addEventListener('click',()=>go(day.n));
+    strip.appendChild(btn);
   });
-  document.querySelectorAll('.day-panel').forEach(p => {
-    p.classList.toggle('active', parseInt(p.dataset.day) === num);
-  });
-  if (scroll) {
-    const pill = document.querySelector(`.day-pill[data-day="${num}"]`);
-    if (pill) pill.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
-  }
-  updateNowLine();
+  main.innerHTML=S.days.map(renderDay).join('');
+  go(tn||1,true);
+  updateNow();
+  setInterval(updateNow,60000);
 }
 
-function init() {
-  const strip = document.getElementById('day-strip');
-  const main  = document.getElementById('main');
-  
-  // Render Navigation
-  SCHEDULE.days.forEach(day => {
-    const isToday = getCurrentDay() === day.num;
-    const pill = document.createElement('button');
-    pill.className  = `day-pill ${isToday ? 'today-pill' : ''}`;
-    pill.dataset.day = day.num;
-    pill.innerHTML  = `
-      <span class="pill-prefix">Day ${day.num}</span>
-      <span class="pill-num">${day.weekday.slice(0,3)}</span>
-      <span class="pill-date">${day.date}</span>
-      ${isToday ? '<span class="today-dot"></span>' : ''}
-    `;
-    pill.addEventListener('click', () => activateDay(day.num));
-    strip.appendChild(pill);
-  });
-
-  // Render Core Timeline Interface
-  main.innerHTML = SCHEDULE.days.map(renderDay).join('');
-  
-  // Set Active View
-  activateDay(getCurrentDay() || 1, true);
-  
-  // Real-time Tracker Start
-  updateNowLine();
-  setInterval(updateNowLine, 60000);
+function shareWA(){
+  window.open(`https://wa.me/?text=${encodeURIComponent('FUSIP 2026 Timetable — check what\'s on today! ')}${encodeURIComponent(location.href)}`,'_blank');
 }
 
-function shareWhatsApp() {
-  const url  = encodeURIComponent(window.location.href);
-  const text = encodeURIComponent('FUSIP 2026 Timetable — check what\'s on today! ');
-  window.open(`https://wa.me/?text=${text}${url}`, '_blank');
-}
-
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
 </html>
