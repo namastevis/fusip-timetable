@@ -139,15 +139,15 @@ html, body {
 .pill-pre  { font-size: 0.52rem; font-weight: 600; color: var(--teal-lt); text-transform: uppercase; letter-spacing: 0.05em; }
 .pill-num  { font-family: var(--font-d); font-size: 0.9rem; font-weight: 700; color: var(--white); line-height: 1.15; }
 .pill-date { font-size: 0.56rem; color: var(--teal-lt); font-weight: 500; }
-.pill.active { background: var(--white); border-color: var(--white); }
-.pill.active .pill-pre  { color: var(--teal-mid); }
-.pill.active .pill-num  { color: var(--teal); }
-.pill.active .pill-date { color: var(--ink); font-weight: 600; }
+.pill.active { background: #ff7020; border-color: #ff7020; box-shadow: 0 2px 8px rgba(255,112,32,0.5); }
+.pill.active .pill-pre  { color: #fff; font-weight: 700; }
+.pill.active .pill-num  { color: #fff; font-weight: 800; text-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+.pill.active .pill-date { color: #fff; font-weight: 700; }
 .pill.today  { border-color: #f0b860; }
 .pill.today .pill-num { color: #f0b860; }
-.pill.today.active .pill-num { color: var(--teal); }
+.pill.today.active .pill-num { color: #fff; }
 .today-dot { width: 4px; height: 4px; border-radius: 50%; background: #f0b860; margin-top: 2px; }
-.pill.active .today-dot { background: var(--teal); }
+.pill.active .today-dot { background: #fff; }
 
 /* ─── DAY PANEL ────────────────────────────────────────────────────────────── */
 main { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
