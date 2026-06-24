@@ -313,7 +313,7 @@ body.filter-b2 [data-batch="b1"] { opacity: 0.12; filter: grayscale(1); pointer-
 .ss > *, .sa > * {
   flex: 1 1 0% !important;
   min-width: 0;
-  max-width: calc(50% - 2px);
+  max-width: calc(50% - 1.5px);
 }
 .h {
   border-radius: var(--radius);
@@ -329,11 +329,18 @@ body.filter-b2 [data-batch="b1"] { opacity: 0.12; filter: grayscale(1); pointer-
 .h .sn { font-size: 0.63rem; font-weight: 700; line-height: 1.15; color: var(--ink); }
 .h .sf { font-size: 0.57rem; line-height: 1.2;  margin-top: 2px;  color: #444; font-weight: 500; }
 .h .st { font-size: 0.5rem;  margin-top: auto; font-weight: 600;  text-transform: uppercase; color: #666; }
+
+/* ─── NESTED COLUMNS FOR ELECTIVES ─────────────────────────────────────────── */
+.h-inner-split { display: flex; flex-direction: row; gap: 5px; flex: 1; min-height: 0; width: 100%; }
+.h-inner-col { flex: 1 1 0%; min-width: 0; display: flex; flex-direction: column; }
+.h-div { width: 1px; background: currentColor; opacity: 0.15; flex-shrink: 0; margin: 2px 0; }
+
 /* Batch academic colours */
 .hb1 { background:var(--b1-lt); border-left:3px solid var(--b1); }
 .hb2 { background:var(--b2-lt); border-left:3px solid var(--b2); }
 .hb1 .sn { color:var(--b1-txt); } .hb1 .sf { color:var(--b1-txt); opacity:0.75; }
 .hb2 .sn { color:var(--b2-txt); } .hb2 .sf { color:var(--b2-txt); opacity:0.75; }
+
 /* Trip/orient follow batch colour via data-batch */
 .h-trip                      { background:var(--b1-lt); border-left:3px solid var(--b1); }
 .h-trip[data-batch="b2"]     { background:var(--b2-lt); border-left:3px solid var(--b2); }
@@ -343,6 +350,7 @@ body.filter-b2 [data-batch="b1"] { opacity: 0.12; filter: grayscale(1); pointer-
 .h-trip[data-batch="b2"] .sn { color:var(--b2-txt); } .h-trip[data-batch="b2"] .sf { color:var(--b2-txt); opacity:0.75; }
 .h-orient .sn                { color:var(--b2-txt); } .h-orient .sf { color:var(--b2-txt); opacity:0.75; }
 .h-orient[data-batch="b1"] .sn { color:var(--b1-txt); } .h-orient[data-batch="b1"] .sf { color:var(--b1-txt); opacity:0.75; }
+
 /* Food unified */
 .h-snack  { background:var(--food-bg); border-left:3px solid var(--food-bd); justify-content:center; }
 .h-snack  .sn { color:var(--food-txt); font-size:0.6rem; }
@@ -470,7 +478,7 @@ body.filter-b2 [data-batch="b1"] { opacity: 0.12; filter: grayscale(1); pointer-
 </div>
 <script>
 // ═══════════════════════════════════════════════════════════════════════
-// SCHEDULE DATA  — edit this block to update any session, time or name
+// SCHEDULE DATA
 // ═══════════════════════════════════════════════════════════════════════
 const S = {
   b1: "Batch 1 (CHK 001)",
@@ -651,13 +659,25 @@ const S = {
           b1:{label:"Consciousness and God",fac:"Michael Hatcher",tag:"Philosophy"},
           b2:{label:"Writing as a Form of Thinking",fac:"Labanya Unni",tag:"Academic Writing"}},
         {t:"snack",s:"11:00",e:"11:30",label:"☕ Snacks & FUSIP in Frames AMA"},
+        
+        // ─── NEW ARRAY-BASED SUB-SPLIT IMPLEMENTATION FOR DAY 8 ───
         {t:"split",s:"11:30",e:"13:30",
-          b1:{label:"Learning by Doing<br><span style='font-size:0.55rem;opacity:0.6;font-weight:600'>Pathik Desai · APJ Design Lab</span><br><span style='font-size:0.6rem;color:var(--b1-txt);font-weight:700'>＋</span><br>Idea Visualization<br><span style='font-size:0.55rem;opacity:0.6;font-weight:600'>Shamit Shrivastav · APJ 104</span>",fac:"",tag:"Design"},
+          b1: [
+            {label:"Learning by Doing", fac:"Pathik Desai · APJ Design Lab", tag:"Design"},
+            {label:"Idea Visualization", fac:"Shamit Shrivastav · APJ 104", tag:"Design"}
+          ],
           b2:{label:"Design Thinking through Storytelling",fac:"Sherline Pimenta",tag:"Design"}},
+          
         {t:"meal",s:"13:30",e:"14:30",label:"Lunch",icon:"🍽"},
+        
         {t:"split",s:"14:30",e:"16:30",
           b1:{label:"Design Thinking through Storytelling",fac:"Sherline Pimenta",tag:"Design"},
-          b2:{label:"Learning by Doing<br><span style='font-size:0.55rem;opacity:0.6;font-weight:600'>Pathik Desai · APJ Design Lab</span><br><span style='font-size:0.6rem;color:var(--b2-txt);font-weight:700'>＋</span><br>Idea Visualization<br><span style='font-size:0.55rem;opacity:0.6;font-weight:600'>Shamit Shrivastav · APJ 104</span>",fac:"",tag:"Design"}},
+          b2: [
+            {label:"Learning by Doing", fac:"Pathik Desai · APJ Design Lab", tag:"Design"},
+            {label:"Idea Visualization", fac:"Shamit Shrivastav · APJ 104", tag:"Design"}
+          ]},
+        // ────────────────────────────────────────────────────────
+        
         {t:"snack",s:"16:30",e:"17:00",label:"☕ Evening Snack & FUSIP in Frames AMA"},
         {t:"free", s:"17:00",e:"18:00",label:"Free Time"},
         {t:"split",s:"18:00",e:"19:00",
@@ -697,7 +717,7 @@ const S = {
       slots:[
         {t:"shared",s:"07:00",e:"08:00",label:"Room Keys Handover"},
         {t:"meal",  s:"08:00",e:"09:00",label:"Breakfast",icon:"🍽"},
-        {t:"shared",s:"09:00",e:"12:30",label:"Presentations",fac:"📍 Shantiniketan",sub:"16 groups · 3 min video + 7 min presentation per group"},
+        {t:"shared",s:"09:00",e:"12:30",label:"Presentations",fac:"📍 Shantiniketan",sub:"16 groups · 3 min video + 7 min presentation each"},
         {t:"snack", s:"12:30",e:"13:30",label:"☕ Snacks & Distribution of Certificates"},
         {t:"end",   s:"13:30",e:"14:00",label:"Program ends — students depart with parents"},
       ]
@@ -706,7 +726,7 @@ const S = {
 };
 
 // ═══════════════════════════════════════════════════════════════════════
-// RENDERING — pure CSS % positioning, no JS pixel measurement
+// RENDERING
 // ═══════════════════════════════════════════════════════════════════════
 const DS = 7*60, DE = 21*60, SPAN = DE-DS;
 
@@ -738,9 +758,22 @@ function renderSlot(sl) {
     return `<div class="slot ${CLS[sl.t]}" style="${p}"><span class="sn">${sl.label}</span>${sl.fac?`<span class="sf">${sl.fac}</span>`:''}${sl.sub?`<span class="sf">${sl.sub}</span>`:''}</div>`;
   
   if (sl.t==='split') {
-    const hh = (h,def)=>{
-      if(!h||(!h.label&&h.cls==='empty')) return `<div class="h h-empty" data-batch="${def}"></div>`;
-      const c = HCLS[h.cls||def]||'hb1';
+    const hh = (h, def) => {
+      // Handles Array specifically for Day 8 Sub-Splits
+      if (Array.isArray(h)) {
+        const c = HCLS[def] || 'hb1';
+        const innerHTML = h.map(sub => `
+          <div class="h-inner-col">
+            <span class="sn">${sub.label}</span>
+            ${sub.fac ? `<span class="sf">${sub.fac}</span>` : ''}
+            ${sub.tag ? `<span class="st">${sub.tag}</span>` : ''}
+          </div>
+        `).join('<div class="h-div"></div>');
+        return `<div class="h ${c}" data-batch="${def}"><div class="h-inner-split">${innerHTML}</div></div>`;
+      }
+      
+      if (!h || (!h.label && h.cls === 'empty')) return `<div class="h h-empty" data-batch="${def}"></div>`;
+      const c = HCLS[h.cls || def] || 'hb1';
       return `<div class="h ${c}" data-batch="${def}">${h.label?`<span class="sn">${h.label}</span>`:''
         }${h.fac?`<span class="sf">${h.fac}</span>`:''
         }${h.tag?`<span class="st">${h.tag}</span>`:''}</div>`;
@@ -751,7 +784,7 @@ function renderSlot(sl) {
   if (sl.t==='asym') {
     const T=sl.tall, sm=tm(sl.s||sl.start), em=tm(sl.e||sl.end), span=em-sm;
     const tallCls = HCLS[T.cls||T.side]||'hb1';
-    const tallBatch = T.side;   // 'b1' or 'b2'
+    const tallBatch = T.side;
     const stackBatch = T.side==='b1' ? 'b2' : 'b1';
     const tallHtml = `<div class="h ${tallCls}" data-batch="${tallBatch}" style="height:100%;">
       <span class="sn">${T.label}</span>
@@ -861,7 +894,6 @@ function init(){
 // ─── BATCH FILTER ───────────────────────────────────────────────────────────
 let curFilter = 'both';
 function setFilter(f) {
-  // Clicking the already-active filter toggles it back to 'both'
   if (f !== 'both' && curFilter === f) f = 'both';
   curFilter = f;
   document.body.classList.remove('filter-b1','filter-b2');
