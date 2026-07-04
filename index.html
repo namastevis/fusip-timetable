@@ -181,6 +181,18 @@ main { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
 .daydate  { font-size: 0.72rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
 .dayvenue { font-size: 0.68rem; color: var(--teal-mid); font-weight: 500; margin-top: 2px; }
 
+/* ─── CANCELLATION / ALERT NOTICE ──────────────────────────────────────────── */
+.day-notice {
+  background: #fdecea;
+  border-left: 4px solid #d9534f;
+  color: #8b2010;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 6px 14px;
+  flex-shrink: 0;
+}
+
 /* ─── LEGEND / FILTER BAR ──────────────────────────────────────────────────── */
 .legend {
   display: flex; gap: 6px; align-items: center;
@@ -640,22 +652,21 @@ const S = {
     },
     {
       n:7, wd:"Sunday", dt:"5 July", venue:null,
-      ticks:["7am","8am","9am","12pm","4:30pm","5pm","8pm","9pm"],
+      notice:"⚠️ Heavy rain alert in Pune — both outdoor activities (High Places Camp & Rural Immersion) are CANCELLED. Revised indoor schedule below.",
+      ticks:["7am","8am","9am","10am","11am","11:30am","12:30pm","2:30pm","4pm","6pm","8pm","9pm"],
       slots:[
-        {t:"split",s:"07:00",e:"08:00",
-          b1:{label:"🍽 Early Breakfast",fac:"Before departure",cls:"b1"},
-          b2:{label:"",cls:"empty"}},
-        {t:"split",s:"08:00",e:"09:00",
-          b1:{label:"Pre-Departure Orientation",fac:"Shivakumar Jolad · CHK 001",cls:"b1"},
-          b2:{label:"🏕 Departs for Garud Machi",fac:"Breakfast served at camp",cls:"b2"}},
-        {t:"asym",s:"09:00",e:"20:00",
-          tall:{side:"b2",label:"🏕 High Places Outdoor Camp",fac:"Garud Machi",tag:"Returns at dinner",cls:"trip"},
-          stack:[
-            {s:"09:00",e:"16:30",label:"🌾 Rural Immersion",fac:"Field trip",tag:"Returns 4:30 pm",cls:"trip"},
-            {s:"16:30",e:"17:00",label:"☕ Evening Snack",fac:"",cls:"snack"},
-            {s:"17:00",e:"20:00",label:"Free Time",fac:"",cls:"free"},
-          ]},
-        {t:"meal",s:"20:00",e:"21:00",label:"Dinner",icon:"🍽"},
+        {t:"meal",  s:"08:00",e:"09:00",label:"Breakfast",icon:"🍽"},
+        {t:"free",  s:"09:00",e:"10:00",label:"Free Time"},
+        {t:"shared",s:"10:00",e:"11:00",label:"Activity",fac:"Prof. Tushar Rajput · 📍 Shantiniketan Auditorium · All 160 students"},
+        {t:"snack", s:"11:00",e:"11:30",label:"☕ Snacks · Shantiniketan Foyer"},
+        {t:"shared",s:"11:30",e:"12:30",label:"Life at FLAME",fac:"Student Ambassadors · 📍 Shantiniketan Auditorium"},
+        {t:"meal",  s:"12:30",e:"14:30",label:"Lunch · Rasoi",icon:"🍽"},
+        {t:"split", s:"14:30",e:"16:00",
+          b1:{label:"FUSIP in Frames (Group Meetings)",fac:"📍 CHK 001",tag:"Group Meetings"},
+          b2:{label:"FUSIP in Frames (Group Meetings)",fac:"📍 CHK 101",tag:"Group Meetings"}},
+        {t:"free",  s:"16:00",e:"18:00",label:"Free Time"},
+        {t:"shared",s:"18:00",e:"20:00",label:"🎶 Jam Session",fac:"📍 Kalidas"},
+        {t:"meal",  s:"20:00",e:"21:00",label:"Dinner",icon:"🍽"},
       ]
     },
     {
@@ -825,6 +836,7 @@ function renderDay(day) {
         <span class="daydate">${day.wd} · ${day.dt}</span>
       </div>${venue}
     </div>
+    ${day.notice?`<div class="day-notice">${day.notice}</div>`:''}
     <div class="legend">
       <span class="leg-label">View:</span>
       <button class="ftog ftog-both factive" onclick="setFilter('both')">Both</button>
